@@ -189,7 +189,7 @@ function main() {
   // a checkpoint is kept when it beats the best so far, measured as time saved vs the straight-line
   // driver on the same episodes (a resumed model trained on other settings starts over)
   const sameEnv = prev && prev.env && ['size', 'blocks', 'pickup', 'onPath'].every((k) => prev.env[k] === envOpts[k]);
-  let best = sameEnv && prev.stats ? prev.stats.agent.meanSeconds - prev.stats.baseline.meanSeconds : Infinity;
+  let best = sameEnv && prev.stats && prev.stats.agent ? prev.stats.agent.meanSeconds - prev.stats.baseline.meanSeconds : Infinity;
   let recent = [];
   const pct = (x) => (100 * x).toFixed(0) + '%';
 
@@ -236,13 +236,19 @@ function main() {
         const kinds = Object.entries(ev.agent.byKind).map(([k, v]) => `${k} ${v.meanSeconds.toFixed(2)}s/used ${pct(v.usedRate)}`).join(', ');
         console.log(`  eval: agent ${ev.agent.meanSeconds.toFixed(2)}s reach ${pct(ev.agent.reachRate)} (${kinds}) vs straight line ${ev.baseline.meanSeconds.toFixed(2)}s`);
         const score = ev.agent.meanSeconds - ev.baseline.meanSeconds;
-        if (score < best && ev.agent.reachRate >= 0.98) {
+        // (a missed target counts as the full time limit, so misses already cost)
+        if (score < best && ev.agent.reachRate >= ev.baseline.reachRate - 0.02) {
           best = score;
           save(Object.assign({ trainedSteps: totalSteps }, ev));
           console.log('  saved', path.relative(process.cwd(), opt.out));
         }
       }
     }
+    // the final weights too, whatever they scored (next to --out, as <name>-last.json)
+    const keep = opt.out; opt.out = opt.out.replace(/\.json$/, '') + '-last.json';
+    save({ trainedSteps: totalSteps, note: 'final weights, not evaluated' });
+    console.log('  saved', path.relative(process.cwd(), opt.out));
+    opt.out = keep;
     for (const wk of workers) wk.terminate();
   })().catch((e) => { console.error(e); process.exit(1); });
 }
