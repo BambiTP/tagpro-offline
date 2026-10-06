@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>TagPro Offline</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="./favicon.ico">
+        <link rel="stylesheet" href="./R-965af4e7a4b8-z/stylesheets/bootstrap.css">
+        <link rel="stylesheet" href="./R-965af4e7a4b8-z/stylesheets/style.css">
+        <style>
+            body { padding: 24px 16px 48px; }
+            .local { max-width: 640px; margin: 0 auto; }
+            .local .logo { text-align: center; margin-bottom: 8px; }
+            .local .logo img { max-width: 100%; }
+            .local .sub { text-align: center; opacity: .8; margin-bottom: 20px; }
+            .local .card { background: rgba(0, 0, 0, .35); border-radius: 6px; padding: 18px 20px; margin-bottom: 16px; }
+            .local label { display: block; margin: 10px 0 4px; }
+            .local label.inline { display: inline-block; margin-right: 16px; font-weight: normal; }
+            .local input[type=file] { max-width: 100%; }
+            .local .row-2 { display: flex; gap: 16px; }
+            .local .row-2 > div { flex: 1; min-width: 0; }
+            .local .play { margin-top: 18px; font-size: 20px; width: 100%; }
+            .local .links { text-align: center; }
+            .local .links a { margin: 0 6px; }
+            .local .hint { opacity: .7; font-size: 12px; }
+            .local .fm-row { display: flex; gap: 8px; }
+            .local .fm-row input { flex: 1; min-width: 0; }
+            .local #fm-preview { display: block; max-width: 100%; max-height: 220px; margin-top: 10px; border-radius: 4px; }
+            .local #fm-status { margin-top: 8px; }
+            .local #fm-status a { text-decoration: underline; }
+            .local #forget { margin-top: 6px; }
+        </style>
+    </head>
+    <body>
+        <div class="local">
+            <div class="logo"><a href="./"><img src="./images/logo.png" alt="TagPro"></a></div>
+            <div class="sub">Single player. The whole game runs in your browser: no server, nobody else.</div>
+            <div id="error" class="alert alert-danger" style="display:none"></div>
+            <form class="card" id="play-form">
+                <label for="name">Your name</label>
+                <input class="form-control" id="name" maxlength="12" placeholder="Some Ball">
+
+                <label for="map">Map</label>
+                <select class="form-control" id="map"></select>
+                <button class="btn btn-default btn-sm" id="forget" type="button" style="display:none">Remove this map from the list</button>
+
+                <label for="mode">Mode</label>
+                <select class="form-control" id="mode">
+                    <option value="classic">Capture the Flag</option>
+                    <option value="gravity">Gravity</option>
+                    <option value="eggball">Eggball</option>
+                </select>
+                <div class="hint">Eggball has its own map.</div>
+
+                <label>Your team</label>
+                <label class="inline"><input type="radio" name="team" value="1" checked> Red</label>
+                <label class="inline"><input type="radio" name="team" value="2"> Blue</label>
+
+                <div class="row-2">
+                    <div>
+                        <label for="allies">Bot teammates</label>
+                        <select class="form-control" id="allies"><option>0</option><option>1</option><option>2</option><option>3</option></select>
+                    </div>
+                    <div>
+                        <label for="enemies">Bot opponents</label>
+                        <select class="form-control" id="enemies"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select>
+                    </div>
+                </div>
+                <div class="hint">No bots: you have the map to yourself to practice.</div>
+
+                <div class="row-2">
+                    <div>
+                        <label for="time">Length (minutes)</label>
+                        <input class="form-control" id="time" type="number" min="1" max="60" value="6">
+                    </div>
+                    <div>
+                        <label for="caps">Cap limit (0 = none)</label>
+                        <input class="form-control" id="caps" type="number" min="0" max="100" value="0">
+                    </div>
+                </div>
+
+                <label class="inline" style="margin-top:12px"><input type="checkbox" id="maptest"> Map testing mode (reset the map with a key, longer AFK time)</label>
+
+                <button class="btn btn-primary play" type="submit">Play</button>
+            </form>
+
+            <form class="card" id="fm-form">
+                <b>Add a map from <a href="https://fortunatemaps.herokuapp.com/" target="_blank" rel="noopener">Fortunate Maps</a></b>
+                <label for="fm-id">Map ID or link</label>
+                <div class="fm-row">
+                    <input class="form-control" id="fm-id" placeholder="e.g. 69860 or https://fortunatemaps.herokuapp.com/map/69860">
+                    <button class="btn btn-default" type="submit">Add</button>
+                </div>
+                <img id="fm-preview" alt="" style="display:none">
+                <div id="fm-status"></div>
+            </form>
+
+            <form class="card" id="upload-form">
+                <b>Add your own map files</b>
+                <div class="row-2">
+                    <div><label for="layout">Layout (.png)</label><input id="layout" type="file" accept=".png,image/png"></div>
+                    <div><label for="logic">Logic (.json)</label><input id="logic" type="file" accept=".json,application/json"></div>
+                </div>
+                <button class="btn btn-default" type="submit" style="margin-top:12px">Add map</button>
+            </form>
+
+            <div class="links">
+                <a class="btn btn-default" href="./textures.html">Textures</a>
+                <a class="btn btn-default" href="./settings.html">Settings</a>
+            </div>
+        </div>
+        <script src="./engine/mapLoader.js"></script>
+        <script src="./launcher.js"></script>
+    </body>
+</html>

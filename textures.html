@@ -1,0 +1,901 @@
+<!doctype html> <!-- eslint-disable-line vue/no-parsing-error -->
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Texture Packs</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <meta property="og:title" content="Texture Packs">
+        <meta property="og:image" content="/images/thumbnail.png">
+
+        <link rel="apple-touch-icon" href="./images/thumbnail.png">
+        <link rel="shortcut icon" href="./favicon.ico">
+
+        <link rel="stylesheet" href="./R-965af4e7a4b8-z/stylesheets/bootstrap.css">
+        <link rel="stylesheet" href="./R-965af4e7a4b8-z/stylesheets/bootstrap-datepicker3.standalone.css">
+        <link rel="stylesheet" href="./R-965af4e7a4b8-z/stylesheets/bootstrap-select.css">
+        <link rel="stylesheet" href="./R-965af4e7a4b8-z/stylesheets/style.css">
+        <link rel="stylesheet" href="./R-965af4e7a4b8-z/stylesheets/font-awesome.css">
+
+        <script src="./R-965af4e7a4b8-z/compact/global-texturePackPicker.js"></script>
+            <script type="text/javascript">
+        tagproConfig.cdn = location.host;
+    </script>
+
+
+        <script>
+            tagproConfig.serverPort = location.port || 80;
+            tagproConfig.serverHost = location.hostname + (tagproConfig.serverPort != 80 ? ':' + tagproConfig.serverPort : '');
+            tagproConfig.cookieHost = location.hostname;
+        </script>
+    </head>
+    <body class="body-with-footer" id="73218c3018844b2f77042c8cac92826160f2f5be9c563da1c3e2a7e5b1103130">
+
+        <div id="header" class="header">
+            <div class="container header-main">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="header-top">
+                            <div class="row">
+                                <div class="col-sm-9 col-md-7 col-lg-6">
+                                    <h1 id="logo" class="logo">
+                                            <a href="./"><img src="./images/logo.png?v=bambi1" alt="BambiPro"></a>
+                                    </h1>
+
+                                        <div class="server-stats">
+                                            <div>Stats</div>
+                                            <div>2 players in 1 game
+                                            </div>
+                                            <div>1 total users online</div>
+                                        </div>
+                                </div>
+                                <div class="col-sm-3 col-md-5 col-lg-6">
+                                    <div class="flair-log hidden-sm" id="flair-log">
+                                    </div>
+
+
+                                    <div class="userbar pull-right">
+                                            <a id="login-btn" class="btn btn-secondary" href="./login">Log In / Sign Up</a>
+                                            <a id="settings-btn" class="btn btn-default" href="./settings.html">Settings</a>
+                                    </div>
+
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                        <div id="site-nav" class="nav">
+                            <button class="mobile-menu-toggle" onclick="this.blur();">
+                            <svg width="32" height="32" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1664 1344v128q0 26-19 45t-45 19h-1408q-26 0-45-19t-19-45v-128q0-26 19-45t45-19h1408q26 0 45 19t19 45zm0-512v128q0 26-19 45t-45 19h-1408q-26 0-45-19t-19-45v-128q0-26 19-45t45-19h1408q26 0 45 19t19 45zm0-512v128q0 26-19 45t-45 19h-1408q-26 0-45-19t-19-45v-128q0-26 19-45t45-19h1408q26 0 45 19t19 45z"/></svg>
+                            </button>
+                            <div class="visible-xs clearfix"></div>
+                            <ul>
+                                <li id="nav-tagpro" class=""><a href="./"><s>Tag</s>BambiPro</a></li>
+                                <li id="nav-groups" class=""><a href="./groups">Groups<span class="group-indicator groupsAvailable bounce">&#x25cf;</span></a></li>
+                                <li id="nav-leaderboards" class=""><a  aria-disabled="true" style="pointer-events:none;opacity:.4;cursor:default">Leaders</a></li>
+                                <li id="nav-maps" class=""><a href="./maps">Maps</a></li>
+                                <li id="nav-playersearch" class=""><a href="./playersearch">Player Search</a></li>
+                                <li id="nav-competitive" class=""><a  aria-disabled="true" style="pointer-events:none;opacity:.4;cursor:default">Competitive</a></li>
+                                <li id="nav-replays" class=""><a href="./replays">Replays</a></li>
+                                <li id="nav-feedback" class=""><a href="./feedback">Feedback<span id="feedback-indicator" style="display: none;" class="group-indicator bounce">&#x25cf;</span></a></li>
+
+                                    <li class="nav-mobile"><a href="./login">Log In / Sign Up</a></li>
+                                    <li class="nav-mobile"><a href="./settings.html">Settings</a></li>
+                            </ul>
+                        </div>
+            </div>
+        </div>
+
+        <!-- start userscript site-wide top -->
+        <div id="userscript-top" class="hidden">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 userscript-template hidden">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end userscript site-wide top -->
+
+        <div class="container texture-packs">
+    <div class="row">
+        <div class="col-md-12">
+
+            <h1 class="header-title">Texture Packs</h1>
+
+                <ul class="tab-list">
+                    <li class="active" data-target="#textures"><a>Available Packs</a></li>
+                    <li data-target="#custom"><a>Import Custom</a></li>
+                </ul>
+
+            <div class="tab-content">
+                <div id="textures" class="tab-pane active">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <p class="explanation-bubble">
+                                Change the look of <s>Tag</s>BambiPro by selecting a texture pack.
+                                    <span class="pull-right">
+                                        Sort by:
+                                        <span class="texture-sort" data-sort-name="name"><a>Name</a></span> /
+                                        <span class="texture-sort" data-sort-name="author"><a>Author</a></span> /
+                                        <span class="texture-sort" data-sort-name="popularity"><a>Popularity</a></span>
+                                    </span>
+                            </p>
+                        </div>
+                        <div id="texture-list">
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Classic" data-author="LuckySpammer" data-popularity="3250956745">
+                                            <span title="Popularity Rating" class="texture-popularity">3251</span>
+                                        <div class="name">Classic</div>
+                                        <div class="author">by LuckySpammer</div>
+                                        <hr>
+                                        <img src="./images/textures/classic.png" id="Classic" alt="Classic" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Muscle&#x27;s Cup Gradients" data-author="MuscleCups" data-popularity="1602824716">
+                                            <span title="Popularity Rating" class="texture-popularity">1603</span>
+                                        <div class="name">Muscle&#x27;s Cup Gradients</div>
+                                        <div class="author">by MuscleCups</div>
+                                        <hr>
+                                        <img src="./images/textures/musclescupgradients.png" id="Muscle&#x27;s Cup Gradients" alt="Muscle&#x27;s Cup Gradients" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Sniper Pack" data-author="DOKE" data-popularity="1483563260">
+                                            <span title="Popularity Rating" class="texture-popularity">1484</span>
+                                        <div class="name">Sniper Pack</div>
+                                        <div class="author">by DOKE</div>
+                                        <hr>
+                                        <img src="./images/textures/sniperpack.png" id="Sniper Pack" alt="Sniper Pack" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Coral Light" data-author="MagicPigeon" data-popularity="1234335371">
+                                            <span title="Popularity Rating" class="texture-popularity">1234</span>
+                                        <div class="name">Coral Light</div>
+                                        <div class="author">by MagicPigeon</div>
+                                        <hr>
+                                        <img src="./images/textures/corallight.png" id="Coral Light" alt="Coral Light" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Muscle&#x27;s Cup OG" data-author="MuscleCups" data-popularity="722536770">
+                                            <span title="Popularity Rating" class="texture-popularity">723</span>
+                                        <div class="name">Muscle&#x27;s Cup OG</div>
+                                        <div class="author">by MuscleCups</div>
+                                        <hr>
+                                        <img src="./images/textures/musclescupog.png" id="Muscle&#x27;s Cup OG" alt="Muscle&#x27;s Cup OG" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Coral" data-author="MagicPigeon" data-popularity="450186974">
+                                            <span title="Popularity Rating" class="texture-popularity">450</span>
+                                        <div class="name">Coral</div>
+                                        <div class="author">by MagicPigeon</div>
+                                        <hr>
+                                        <img src="./images/textures/coral.png" id="Coral" alt="Coral" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="MTBad" data-author="mtbkr24" data-popularity="423303703">
+                                            <span title="Popularity Rating" class="texture-popularity">423</span>
+                                        <div class="name">MTBad</div>
+                                        <div class="author">by mtbkr24</div>
+                                        <hr>
+                                        <img src="./images/textures/mtbad.png" id="MTBad" alt="MTBad" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Flat" data-author="why" data-popularity="395478404">
+                                            <span title="Popularity Rating" class="texture-popularity">395</span>
+                                        <div class="name">Flat</div>
+                                        <div class="author">by why</div>
+                                        <hr>
+                                        <img src="./images/textures/flat.png" id="Flat" alt="Flat" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="MLTP Live" data-author="Ron Spawnson" data-popularity="266657439">
+                                            <span title="Popularity Rating" class="texture-popularity">267</span>
+                                        <div class="name">MLTP Live</div>
+                                        <div class="author">by Ron Spawnson</div>
+                                        <hr>
+                                        <img src="./images/textures/mltplive.png" id="MLTP Live" alt="MLTP Live" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="24K" data-author="MagicPigeon" data-popularity="242335030">
+                                            <span title="Popularity Rating" class="texture-popularity">242</span>
+                                        <div class="name">24K</div>
+                                        <div class="author">by MagicPigeon</div>
+                                        <hr>
+                                        <img src="./images/textures/24k.png" id="24K" alt="24K" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Precision Dark" data-author="Peach Fuzz" data-popularity="220030843">
+                                            <span title="Popularity Rating" class="texture-popularity">220</span>
+                                        <div class="name">Precision Dark</div>
+                                        <div class="author">by Peach Fuzz</div>
+                                        <hr>
+                                        <img src="./images/textures/precisiondark.png" id="Precision Dark" alt="Precision Dark" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Plumb" data-author="SuperTed" data-popularity="182013842">
+                                            <span title="Popularity Rating" class="texture-popularity">182</span>
+                                        <div class="name">Plumb</div>
+                                        <div class="author">by SuperTed</div>
+                                        <hr>
+                                        <img src="./images/textures/plumb.png" id="Plumb" alt="Plumb" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Sparkle" data-author="MagicPigeon" data-popularity="176216269">
+                                            <span title="Popularity Rating" class="texture-popularity">176</span>
+                                        <div class="name">Sparkle</div>
+                                        <div class="author">by MagicPigeon</div>
+                                        <hr>
+                                        <img src="./images/textures/sparkle.png" id="Sparkle" alt="Sparkle" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Plique" data-author="Despair" data-popularity="173309670">
+                                            <span title="Popularity Rating" class="texture-popularity">173</span>
+                                        <div class="name">Plique</div>
+                                        <div class="author">by Despair</div>
+                                        <hr>
+                                        <img src="./images/textures/plique.png" id="Plique" alt="Plique" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="CamsPP Old" data-author="Cam" data-popularity="168436952">
+                                            <span title="Popularity Rating" class="texture-popularity">168</span>
+                                        <div class="name">CamsPP Old</div>
+                                        <div class="author">by Cam</div>
+                                        <hr>
+                                        <img src="./images/textures/camsppold.png" id="CamsPP Old" alt="CamsPP Old" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Isometric" data-author="mtbkr24" data-popularity="165661541">
+                                            <span title="Popularity Rating" class="texture-popularity">166</span>
+                                        <div class="name">Isometric</div>
+                                        <div class="author">by mtbkr24</div>
+                                        <hr>
+                                        <img src="./images/textures/isometric.png" id="Isometric" alt="Isometric" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="CamsPP Dark" data-author="Cam" data-popularity="164292375">
+                                            <span title="Popularity Rating" class="texture-popularity">164</span>
+                                        <div class="name">CamsPP Dark</div>
+                                        <div class="author">by Cam</div>
+                                        <hr>
+                                        <img src="./images/textures/camsppdark.png" id="CamsPP Dark" alt="CamsPP Dark" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Classique" data-author="LuckySpammer &amp; bash#" data-popularity="159322029">
+                                            <span title="Popularity Rating" class="texture-popularity">159</span>
+                                        <div class="name">Classique</div>
+                                        <div class="author">by LuckySpammer &amp; bash#</div>
+                                        <hr>
+                                        <img src="./images/textures/classique.png" id="Classique" alt="Classique" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="CMYK" data-author="MagicPigeon" data-popularity="144533207">
+                                            <span title="Popularity Rating" class="texture-popularity">145</span>
+                                        <div class="name">CMYK</div>
+                                        <div class="author">by MagicPigeon</div>
+                                        <hr>
+                                        <img src="./images/textures/cmyk.png" id="CMYK" alt="CMYK" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="CamsPP Light" data-author="Cam" data-popularity="132584974">
+                                            <span title="Popularity Rating" class="texture-popularity">133</span>
+                                        <div class="name">CamsPP Light</div>
+                                        <div class="author">by Cam</div>
+                                        <hr>
+                                        <img src="./images/textures/camspplight.png" id="CamsPP Light" alt="CamsPP Light" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Sketch+" data-author="MagicPigeon" data-popularity="131822559">
+                                            <span title="Popularity Rating" class="texture-popularity">132</span>
+                                        <div class="name">Sketch+</div>
+                                        <div class="author">by MagicPigeon</div>
+                                        <hr>
+                                        <img src="./images/textures/sketch.png" id="Sketch+" alt="Sketch+" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Brioche Light" data-author="Brioche" data-popularity="124794058">
+                                            <span title="Popularity Rating" class="texture-popularity">125</span>
+                                        <div class="name">Brioche Light</div>
+                                        <div class="author">by Brioche</div>
+                                        <hr>
+                                        <img src="./images/textures/briochelight.png" id="Brioche Light" alt="Brioche Light" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Electric" data-author="Bug" data-popularity="120779889">
+                                            <span title="Popularity Rating" class="texture-popularity">121</span>
+                                        <div class="name">Electric</div>
+                                        <div class="author">by Bug</div>
+                                        <hr>
+                                        <img src="./images/textures/electric.png" id="Electric" alt="Electric" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Sharp" data-author="MagicPigeon" data-popularity="102695276">
+                                            <span title="Popularity Rating" class="texture-popularity">103</span>
+                                        <div class="name">Sharp</div>
+                                        <div class="author">by MagicPigeon</div>
+                                        <hr>
+                                        <img src="./images/textures/sharp.png" id="Sharp" alt="Sharp" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="PastelPro" data-author="SuperTed" data-popularity="101273597">
+                                            <span title="Popularity Rating" class="texture-popularity">101</span>
+                                        <div class="name">PastelPro</div>
+                                        <div class="author">by SuperTed</div>
+                                        <hr>
+                                        <img src="./images/textures/pastelpro.png" id="PastelPro" alt="PastelPro" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Element+" data-author="MagicPigeon" data-popularity="96832425">
+                                            <span title="Popularity Rating" class="texture-popularity">97</span>
+                                        <div class="name">Element+</div>
+                                        <div class="author">by MagicPigeon</div>
+                                        <hr>
+                                        <img src="./images/textures/element.png" id="Element+" alt="Element+" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="nom" data-author="anom" data-popularity="79099132">
+                                            <span title="Popularity Rating" class="texture-popularity">79</span>
+                                        <div class="name">nom</div>
+                                        <div class="author">by anom</div>
+                                        <hr>
+                                        <img src="./images/textures/nom.png" id="nom" alt="nom" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Mural" data-author="DaEvil1" data-popularity="71163135">
+                                            <span title="Popularity Rating" class="texture-popularity">71</span>
+                                        <div class="name">Mural</div>
+                                        <div class="author">by DaEvil1</div>
+                                        <hr>
+                                        <img src="./images/textures/mural.png" id="Mural" alt="Mural" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Circlejerk" data-author="Bizkut and Ion" data-popularity="69117406">
+                                            <span title="Popularity Rating" class="texture-popularity">69</span>
+                                        <div class="name">Circlejerk</div>
+                                        <div class="author">by Bizkut and Ion</div>
+                                        <hr>
+                                        <img src="./images/textures/circlejerk.png" id="Circlejerk" alt="Circlejerk" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Supreme" data-author="bicycle" data-popularity="67563977">
+                                            <span title="Popularity Rating" class="texture-popularity">68</span>
+                                        <div class="name">Supreme</div>
+                                        <div class="author">by bicycle</div>
+                                        <hr>
+                                        <img src="./images/textures/supreme.png" id="Supreme" alt="Supreme" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Turbo" data-author="Ooops" data-popularity="60858581">
+                                            <span title="Popularity Rating" class="texture-popularity">61</span>
+                                        <div class="name">Turbo</div>
+                                        <div class="author">by Ooops</div>
+                                        <hr>
+                                        <img src="./images/textures/turbo.png" id="Turbo" alt="Turbo" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Starlight" data-author="MagicPigeon" data-popularity="53494248">
+                                            <span title="Popularity Rating" class="texture-popularity">53</span>
+                                        <div class="name">Starlight</div>
+                                        <div class="author">by MagicPigeon</div>
+                                        <hr>
+                                        <img src="./images/textures/starlight.png" id="Starlight" alt="Starlight" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="TerminalPX" data-author="pooppants" data-popularity="50670810">
+                                            <span title="Popularity Rating" class="texture-popularity">51</span>
+                                        <div class="name">TerminalPX</div>
+                                        <div class="author">by pooppants</div>
+                                        <hr>
+                                        <img src="./images/textures/terminalpx.png" id="TerminalPX" alt="TerminalPX" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Crystal" data-author="MagicPigeon" data-popularity="42201094">
+                                            <span title="Popularity Rating" class="texture-popularity">42</span>
+                                        <div class="name">Crystal</div>
+                                        <div class="author">by MagicPigeon</div>
+                                        <hr>
+                                        <img src="./images/textures/crystal.png" id="Crystal" alt="Crystal" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Granata" data-author="_Coffee_" data-popularity="37741745">
+                                            <span title="Popularity Rating" class="texture-popularity">38</span>
+                                        <div class="name">Granata</div>
+                                        <div class="author">by _Coffee_</div>
+                                        <hr>
+                                        <img src="./images/textures/granata.png" id="Granata" alt="Granata" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Brioche Extra Light" data-author="Brioche" data-popularity="37593404">
+                                            <span title="Popularity Rating" class="texture-popularity">38</span>
+                                        <div class="name">Brioche Extra Light</div>
+                                        <div class="author">by Brioche</div>
+                                        <hr>
+                                        <img src="./images/textures/briocheextralight.png" id="Brioche Extra Light" alt="Brioche Extra Light" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Bold" data-author="MagicPigeon" data-popularity="36969229">
+                                            <span title="Popularity Rating" class="texture-popularity">37</span>
+                                        <div class="name">Bold</div>
+                                        <div class="author">by MagicPigeon</div>
+                                        <hr>
+                                        <img src="./images/textures/bold.png" id="Bold" alt="Bold" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Jello" data-author="MC Ride" data-popularity="32300816">
+                                            <span title="Popularity Rating" class="texture-popularity">32</span>
+                                        <div class="name">Jello</div>
+                                        <div class="author">by MC Ride</div>
+                                        <hr>
+                                        <img src="./images/textures/jello.png" id="Jello" alt="Jello" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Celeste" data-author="MagicPigeon" data-popularity="30403142">
+                                            <span title="Popularity Rating" class="texture-popularity">30</span>
+                                        <div class="name">Celeste</div>
+                                        <div class="author">by MagicPigeon</div>
+                                        <hr>
+                                        <img src="./images/textures/celeste.png" id="Celeste" alt="Celeste" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Mumbo" data-author="MagicPigeon" data-popularity="28354752">
+                                            <span title="Popularity Rating" class="texture-popularity">28</span>
+                                        <div class="name">Mumbo</div>
+                                        <div class="author">by MagicPigeon</div>
+                                        <hr>
+                                        <img src="./images/textures/mumbo.png" id="Mumbo" alt="Mumbo" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Brioche Deluxe" data-author="Bumballbee and Brioche" data-popularity="28327422">
+                                            <span title="Popularity Rating" class="texture-popularity">28</span>
+                                        <div class="name">Brioche Deluxe</div>
+                                        <div class="author">by Bumballbee and Brioche</div>
+                                        <hr>
+                                        <img src="./images/textures/briochedeluxe.png" id="Brioche Deluxe" alt="Brioche Deluxe" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Flat (Bug)" data-author="Bug" data-popularity="23080679">
+                                            <span title="Popularity Rating" class="texture-popularity">23</span>
+                                        <div class="name">Flat (Bug)</div>
+                                        <div class="author">by Bug</div>
+                                        <hr>
+                                        <img src="./images/textures/flatbug.png" id="Flat (Bug)" alt="Flat (Bug)" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Maxima" data-author="MagicPigeon" data-popularity="19773182">
+                                            <span title="Popularity Rating" class="texture-popularity">20</span>
+                                        <div class="name">Maxima</div>
+                                        <div class="author">by MagicPigeon</div>
+                                        <hr>
+                                        <img src="./images/textures/maxima.png" id="Maxima" alt="Maxima" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Wave" data-author="Waterwheel" data-popularity="18482467">
+                                            <span title="Popularity Rating" class="texture-popularity">18</span>
+                                        <div class="name">Wave</div>
+                                        <div class="author">by Waterwheel</div>
+                                        <hr>
+                                        <img src="./images/textures/wave.png" id="Wave" alt="Wave" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="TagPro Next Classic" data-author="KoalaBeast, MagicPigeon, Ronding" data-popularity="18473431">
+                                            <span title="Popularity Rating" class="texture-popularity">18</span>
+                                        <div class="name"><s>Tag</s>BambiPro Next Classic</div>
+                                        <div class="author">by KoalaBeast, MagicPigeon, Ronding</div>
+                                        <hr>
+                                        <img src="./images/textures/tagpronextclassic.png" id="TagPro Next Classic" alt="BambiPro Next Classic" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Chip" data-author="anom" data-popularity="18099894">
+                                            <span title="Popularity Rating" class="texture-popularity">18</span>
+                                        <div class="name">Chip</div>
+                                        <div class="author">by anom</div>
+                                        <hr>
+                                        <img src="./images/textures/chip.png" id="Chip" alt="Chip" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Funko" data-author="MC Ride" data-popularity="16308531">
+                                            <span title="Popularity Rating" class="texture-popularity">16</span>
+                                        <div class="name">Funko</div>
+                                        <div class="author">by MC Ride</div>
+                                        <hr>
+                                        <img src="./images/textures/funko.png" id="Funko" alt="Funko" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Softpaint" data-author="Xcissors ft. anom" data-popularity="10590160">
+                                            <span title="Popularity Rating" class="texture-popularity">11</span>
+                                        <div class="name">Softpaint</div>
+                                        <div class="author">by Xcissors ft. anom</div>
+                                        <hr>
+                                        <img src="./images/textures/softpaint.png" id="Softpaint" alt="Softpaint" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Blacklight" data-author="MC Ride" data-popularity="7810387">
+                                            <span title="Popularity Rating" class="texture-popularity">8</span>
+                                        <div class="name">Blacklight</div>
+                                        <div class="author">by MC Ride</div>
+                                        <hr>
+                                        <img src="./images/textures/blacklight.png" id="Blacklight" alt="Blacklight" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Yin &amp; Yang" data-author="_Coffee_" data-popularity="5034296">
+                                            <span title="Popularity Rating" class="texture-popularity">5</span>
+                                        <div class="name">Yin &amp; Yang</div>
+                                        <div class="author">by _Coffee_</div>
+                                        <hr>
+                                        <img src="./images/textures/yinyang.png" id="Yin &amp; Yang" alt="Yin &amp; Yang" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Return" data-author="Flaccid Trip" data-popularity="4875846">
+                                            <span title="Popularity Rating" class="texture-popularity">5</span>
+                                        <div class="name">Return</div>
+                                        <div class="author">by Flaccid Trip</div>
+                                        <hr>
+                                        <img src="./images/textures/return.png" id="Return" alt="Return" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Grace" data-author="Moosen" data-popularity="4726603">
+                                            <span title="Popularity Rating" class="texture-popularity">5</span>
+                                        <div class="name">Grace</div>
+                                        <div class="author">by Moosen</div>
+                                        <hr>
+                                        <img src="./images/textures/grace.png" id="Grace" alt="Grace" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Afloat" data-author="Pingu" data-popularity="3790622">
+                                            <span title="Popularity Rating" class="texture-popularity">4</span>
+                                        <div class="name">Afloat</div>
+                                        <div class="author">by Pingu</div>
+                                        <hr>
+                                        <img src="./images/textures/afloat.png" id="Afloat" alt="Afloat" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Spongepack" data-author="_Coffee_" data-popularity="3111494">
+                                            <span title="Popularity Rating" class="texture-popularity">3</span>
+                                        <div class="name">Spongepack</div>
+                                        <div class="author">by _Coffee_</div>
+                                        <hr>
+                                        <img src="./images/textures/spongepack.png" id="Spongepack" alt="Spongepack" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Twine" data-author="Flaccid Trip" data-popularity="2959408">
+                                            <span title="Popularity Rating" class="texture-popularity">3</span>
+                                        <div class="name">Twine</div>
+                                        <div class="author">by Flaccid Trip</div>
+                                        <hr>
+                                        <img src="./images/textures/twine.png" id="Twine" alt="Twine" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Ancient Gems" data-author="Flaccid Trip ft. jazzz" data-popularity="1515595">
+                                            <span title="Popularity Rating" class="texture-popularity">2</span>
+                                        <div class="name">Ancient Gems</div>
+                                        <div class="author">by Flaccid Trip ft. jazzz</div>
+                                        <hr>
+                                        <img src="./images/textures/ancientgems.png" id="Ancient Gems" alt="Ancient Gems" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Bowling" data-author="_Coffee_" data-popularity="915843">
+                                            <span title="Popularity Rating" class="texture-popularity">1</span>
+                                        <div class="name">Bowling</div>
+                                        <div class="author">by _Coffee_</div>
+                                        <hr>
+                                        <img src="./images/textures/bowling.png" id="Bowling" alt="Bowling" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Supreme Shine" data-author="Flaccid Trip" data-popularity="382069">
+                                            <span title="Popularity Rating" class="texture-popularity">0</span>
+                                        <div class="name">Supreme Shine</div>
+                                        <div class="author">by Flaccid Trip</div>
+                                        <hr>
+                                        <img src="./images/textures/supremeshine.png" id="Supreme Shine" alt="Supreme Shine" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Xmas" data-author="jazzz" data-popularity="298298">
+                                            <span title="Popularity Rating" class="texture-popularity">0</span>
+                                        <div class="name">Xmas</div>
+                                        <div class="author">by jazzz</div>
+                                        <hr>
+                                        <img src="./images/textures/xmas.png" id="Xmas" alt="Xmas" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    <div class="texture-choice" data-name="Purple" data-author="SuperTed &amp; mc ride" data-popularity="0">
+                                            <span title="Popularity Rating" class="texture-popularity">0</span>
+                                        <div class="name">Purple</div>
+                                        <div class="author">by SuperTed &amp; mc ride</div>
+                                        <hr>
+                                        <img src="./images/textures/purple.png" id="Purple" alt="Purple" class="texture-image img-responsive">
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="custom" class="tab-pane">
+                    <div class="row" id="custom-chooser">
+                        <div class="col-xs-12 col-md-6">
+                            <h3>Import a Custom Texture Pack</h3>
+                            <p>
+                                Use your own texture pack by submitting links to the proper files on the right.
+                                Each field expects a full url to a png file.
+
+                                Upload your textures to an image hosting site like <a href="http://imgur.com" target="_blank">Imgur</a>.
+                            </p>
+
+                            <p>
+                                You can use the classic textures as a baseplate for creating your own.
+                            <table class="table table-stripped">
+                                <thead>
+                                    <tr>
+                                        <th>Texture</th>
+                                        <th>Dimensions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><a href="./images/tiles.png">Tiles</a></td>
+                                        <td>640x440</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="./images/speedpad.png">Speedpad</a></td>
+                                        <td>200x40</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="./images/speedpadred.png">Speedpad (Red)</a></td>
+                                        <td>200x40</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="./images/speedpadblue.png">Speedpad (Blue)</a></td>
+                                        <td>200x40</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="./images/portal.png">Portal</a></td>
+                                        <td>200x40</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="./images/portalred.png">Portal (Red)</a></td>
+                                        <td>200x40</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="./images/portalblue.png">Portal (Blue)</a></td>
+                                        <td>200x40</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="./images/splats.png">Splats</a></td>
+                                        <td>840x240</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="./images/gravitywell.png">Gravity Well</a></td>
+                                        <td>40x40</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <p>
+                                More information and themes not officially in <s>Tag</s>BambiPro can be found by visiting the <a href="https://old.reddit.com/r/TagPro/wiki/modding/texture-packs" target="_blank"><s>Tag</s>BambiPro Texture Pack wiki page</a>.
+                            </p>
+                        </div>
+
+                        <div class="col-xs-12 col-md-6 form-horizontal">
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="sharepack">SharePack</label>
+                                    <a class="pull-right" href="https://old.reddit.com/r/TagPro/wiki/modding/texture-packs#wiki_sharepacks" target="_blank">What's this?</a>
+                                    <input type="text" class="form-control with-copy-helper" id="sharepack">
+                                    <span data-copyhelper="sharepack"></span>
+                                    <div style="margin-top: 5px;">
+                                        <button id="sharepack-load" class="btn btn-secondary btn-tiny">Load</button>
+                                        <button id="sharepack-generate" class="btn btn-secondary btn-tiny">Generate</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="tiles">Tiles</label>
+                                    <input type="text" class="form-control texture-url" imagewidth="640" imageheight="440" id="tiles">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="speedpad">Speedpad</label>
+                                    <input type="text" class="form-control texture-url" imagewidthatleast="80" imagewidthmultipleof="40" imageheight="40" id="speedpad">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="speedpadRed">Speedpad (Red)</label>
+                                    <input type="text" class="form-control texture-url" imagewidthatleast="80" imagewidthmultipleof="40" imageheight="40" id="speedpadRed">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="speedpadBlue">Speedpad (Blue)</label>
+                                    <input type="text" class="form-control texture-url" imagewidthatleast="80" imagewidthmultipleof="40" imageheight="40" id="speedpadBlue">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="portal">Portal</label>
+                                    <input type="text" class="form-control texture-url" imagewidthatleast="80" imagewidthmultipleof="40" imageheight="40" id="portal">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="portalRed">Portal (Red)</label>
+                                    <input type="text" class="form-control texture-url" imagewidthatleast="80" imagewidthmultipleof="40" imageheight="40" id="portalRed">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="portalBlue">Portal (Blue)</label>
+                                    <input type="text" class="form-control texture-url" imagewidthatleast="80" imagewidthmultipleof="40" imageheight="40" id="portalBlue">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="splats">Splats</label>
+                                    <input type="text" class="form-control texture-url" imagewidthatleast="120" imagewidthmultipleof="120" imageheight="240" id="splats">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label for="gravityWell">Gravity Well</label>
+                                    <input type="text" class="form-control texture-url" imagewidth="40" imageheight="40" id="gravityWell">
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="form-status" style="margin-bottom: 10px;"></div>
+                            <button class="btn" id="custom-textures-btn">Import Textures</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="hidden" id="texture-pack-data">
+    [{"name":"Classic","author":"LuckySpammer","url":"classic","tiles":"./textures/classic/tiles.png","speedpad":"./textures/classic/speedpad.png","speedpadRed":"./textures/classic/speedpadred.png","speedpadBlue":"./textures/classic/speedpadblue.png","portal":"./textures/classic/portal.png","portalRed":"./textures/classic/portalred.png","portalBlue":"./textures/classic/portalblue.png","splats":"./textures/classic/splats.png","popularity":3250956745,"popularityScore":"3251"},{"name":"Muscle's Cup Gradients","author":"MuscleCups","url":"musclescupgradients","tiles":"./textures/musclescupgradients/tiles.png","speedpad":"./textures/musclescupgradients/speedpad.png","speedpadRed":"./textures/musclescupgradients/speedpadred.png","speedpadBlue":"./textures/musclescupgradients/speedpadblue.png","portal":"./textures/musclescupgradients/portal.png","portalRed":"./textures/musclescupgradients/portalred.png","portalBlue":"./textures/musclescupgradients/portalblue.png","splats":"./textures/musclescupgradients/splats.png","popularity":1602824716,"popularityScore":"1603"},{"name":"Sniper Pack","author":"DOKE","url":"sniperpack","tiles":"./textures/sniperpack/tiles.png","speedpad":"./textures/sniperpack/speedpad.png","speedpadRed":"./textures/sniperpack/speedpadred.png","speedpadBlue":"./textures/sniperpack/speedpadblue.png","portal":"./textures/sniperpack/portal.png","portalRed":"./textures/sniperpack/portalred.png","portalBlue":"./textures/sniperpack/portalblue.png","splats":"./textures/sniperpack/splats.png","popularity":1483563260,"popularityScore":"1484"},{"name":"Coral Light","author":"MagicPigeon","url":"corallight","tiles":"./textures/corallight/tiles.png","speedpad":"./textures/corallight/speedpad.png","speedpadRed":"./textures/corallight/speedpadred.png","speedpadBlue":"./textures/corallight/speedpadblue.png","portal":"./textures/corallight/portal.png","portalRed":"./textures/corallight/portalred.png","portalBlue":"./textures/corallight/portalblue.png","splats":"./textures/corallight/splats.png","popularity":1234335371,"popularityScore":"1234"},{"name":"Muscle's Cup OG","author":"MuscleCups","url":"musclescupog","tiles":"./textures/musclescupog/tiles.png","speedpad":"./textures/musclescupog/speedpad.png","speedpadRed":"./textures/musclescupog/speedpadred.png","speedpadBlue":"./textures/musclescupog/speedpadblue.png","portal":"./textures/musclescupog/portal.png","portalRed":"./textures/musclescupog/portalred.png","portalBlue":"./textures/musclescupog/portalblue.png","splats":"./textures/musclescupog/splats.png","popularity":722536770,"popularityScore":"723"},{"name":"Coral","author":"MagicPigeon","url":"coral","tiles":"./textures/coral/tiles.png","speedpad":"./textures/coral/speedpad.png","speedpadRed":"./textures/coral/speedpadred.png","speedpadBlue":"./textures/coral/speedpadblue.png","portal":"./textures/coral/portal.png","portalRed":"./textures/coral/portalred.png","portalBlue":"./textures/coral/portalblue.png","splats":"./textures/coral/splats.png","popularity":450186974,"popularityScore":"450"},{"name":"MTBad","author":"mtbkr24","url":"mtbad","tiles":"./textures/mtbad/tiles.png","speedpad":"./textures/mtbad/speedpad.png","speedpadRed":"./textures/mtbad/speedpadred.png","speedpadBlue":"./textures/mtbad/speedpadblue.png","portal":"./textures/mtbad/portal.png","portalRed":"./textures/mtbad/portalred.png","portalBlue":"./textures/mtbad/portalblue.png","splats":"./textures/mtbad/splats.png","popularity":423303703,"popularityScore":"423"},{"name":"Flat","author":"why","url":"flat","tiles":"./textures/flat/tiles.png","speedpad":"./textures/flat/speedpad.png","speedpadRed":"./textures/flat/speedpadred.png","speedpadBlue":"./textures/flat/speedpadblue.png","portal":"./textures/flat/portal.png","portalRed":"./textures/flat/portalred.png","portalBlue":"./textures/flat/portalblue.png","splats":"./textures/flat/splats.png","popularity":395478404,"popularityScore":"395"},{"name":"MLTP Live","author":"Ron Spawnson","url":"mltplive","tiles":"./textures/mltplive/tiles.png","speedpad":"./textures/mltplive/speedpad.png","speedpadRed":"./textures/mltplive/speedpadred.png","speedpadBlue":"./textures/mltplive/speedpadblue.png","portal":"./textures/mltplive/portal.png","portalRed":"./textures/mltplive/portalred.png","portalBlue":"./textures/mltplive/portalblue.png","splats":"./textures/mltplive/splats.png","popularity":266657439,"popularityScore":"267"},{"name":"24K","author":"MagicPigeon","url":"24k","tiles":"./textures/24k/tiles.png","speedpad":"./textures/24k/speedpad.png","speedpadRed":"./textures/24k/speedpadred.png","speedpadBlue":"./textures/24k/speedpadblue.png","portal":"./textures/24k/portal.png","portalRed":"./textures/24k/portalred.png","portalBlue":"./textures/24k/portalblue.png","splats":"./textures/24k/splats.png","popularity":242335030,"popularityScore":"242"},{"name":"Precision Dark","author":"Peach Fuzz","url":"precisiondark","tiles":"./textures/precisiondark/tiles.png","speedpad":"./textures/precisiondark/speedpad.png","speedpadRed":"./textures/precisiondark/speedpadred.png","speedpadBlue":"./textures/precisiondark/speedpadblue.png","portal":"./textures/precisiondark/portal.png","portalRed":"./textures/precisiondark/portalred.png","portalBlue":"./textures/precisiondark/portalblue.png","splats":"./textures/precisiondark/splats.png","popularity":220030843,"popularityScore":"220"},{"name":"Plumb","author":"SuperTed","url":"plumb","tiles":"./textures/plumb/tiles.png","speedpad":"./textures/plumb/speedpad.png","speedpadRed":"./textures/plumb/speedpadred.png","speedpadBlue":"./textures/plumb/speedpadblue.png","portal":"./textures/plumb/portal.png","portalRed":"./textures/plumb/portalred.png","portalBlue":"./textures/plumb/portalblue.png","splats":"./textures/plumb/splats.png","popularity":182013842,"popularityScore":"182"},{"name":"Sparkle","author":"MagicPigeon","url":"sparkle","tiles":"./textures/sparkle/tiles.png","speedpad":"./textures/sparkle/speedpad.png","speedpadRed":"./textures/sparkle/speedpadred.png","speedpadBlue":"./textures/sparkle/speedpadblue.png","portal":"./textures/sparkle/portal.png","portalRed":"./textures/sparkle/portalred.png","portalBlue":"./textures/sparkle/portalblue.png","splats":"./textures/sparkle/splats.png","popularity":176216269,"popularityScore":"176"},{"name":"Plique","author":"Despair","url":"plique","tiles":"./textures/plique/tiles.png","speedpad":"./textures/plique/speedpad.png","speedpadRed":"./textures/plique/speedpadred.png","speedpadBlue":"./textures/plique/speedpadblue.png","portal":"./textures/plique/portal.png","portalRed":"./textures/plique/portalred.png","portalBlue":"./textures/plique/portalblue.png","splats":"./textures/plique/splats.png","popularity":173309670,"popularityScore":"173"},{"name":"CamsPP Old","author":"Cam","url":"camsppold","tiles":"./textures/camsppold/tiles.png","speedpad":"./textures/camsppold/speedpad.png","speedpadRed":"./textures/camsppold/speedpadred.png","speedpadBlue":"./textures/camsppold/speedpadblue.png","portal":"./textures/camsppold/portal.png","portalRed":"./textures/camsppold/portalred.png","portalBlue":"./textures/camsppold/portalblue.png","splats":"./textures/camsppold/splats.png","popularity":168436952,"popularityScore":"168"},{"name":"Isometric","author":"mtbkr24","url":"isometric","tiles":"./textures/isometric/tiles.png","speedpad":"./textures/isometric/speedpad.png","speedpadRed":"./textures/isometric/speedpadred.png","speedpadBlue":"./textures/isometric/speedpadblue.png","portal":"./textures/isometric/portal.png","portalRed":"./textures/isometric/portalred.png","portalBlue":"./textures/isometric/portalblue.png","splats":"./textures/isometric/splats.png","popularity":165661541,"popularityScore":"166"},{"name":"CamsPP Dark","author":"Cam","url":"camsppdark","tiles":"./textures/camsppdark/tiles.png","speedpad":"./textures/camsppdark/speedpad.png","speedpadRed":"./textures/camsppdark/speedpadred.png","speedpadBlue":"./textures/camsppdark/speedpadblue.png","portal":"./textures/camsppdark/portal.png","portalRed":"./textures/camsppdark/portalred.png","portalBlue":"./textures/camsppdark/portalblue.png","splats":"./textures/camsppdark/splats.png","popularity":164292375,"popularityScore":"164"},{"name":"Classique","author":"LuckySpammer & bash#","url":"classique","tiles":"./textures/classique/tiles.png","speedpad":"./textures/classique/speedpad.png","speedpadRed":"./textures/classique/speedpadred.png","speedpadBlue":"./textures/classique/speedpadblue.png","portal":"./textures/classique/portal.png","portalRed":"./textures/classique/portalred.png","portalBlue":"./textures/classique/portalblue.png","splats":"./textures/classique/splats.png","popularity":159322029,"popularityScore":"159"},{"name":"CMYK","author":"MagicPigeon","url":"cmyk","tiles":"./textures/cmyk/tiles.png","speedpad":"./textures/cmyk/speedpad.png","speedpadRed":"./textures/cmyk/speedpadred.png","speedpadBlue":"./textures/cmyk/speedpadblue.png","portal":"./textures/cmyk/portal.png","portalRed":"./textures/cmyk/portalred.png","portalBlue":"./textures/cmyk/portalblue.png","splats":"./textures/cmyk/splats.png","popularity":144533207,"popularityScore":"145"},{"name":"CamsPP Light","author":"Cam","url":"camspplight","tiles":"./textures/camspplight/tiles.png","speedpad":"./textures/camspplight/speedpad.png","speedpadRed":"./textures/camspplight/speedpadred.png","speedpadBlue":"./textures/camspplight/speedpadblue.png","portal":"./textures/camspplight/portal.png","portalRed":"./textures/camspplight/portalred.png","portalBlue":"./textures/camspplight/portalblue.png","splats":"./textures/camspplight/splats.png","popularity":132584974,"popularityScore":"133"},{"name":"Sketch+","author":"MagicPigeon","url":"sketch","tiles":"./textures/sketch/tiles.png","speedpad":"./textures/sketch/speedpad.png","speedpadRed":"./textures/sketch/speedpadred.png","speedpadBlue":"./textures/sketch/speedpadblue.png","portal":"./textures/sketch/portal.png","portalRed":"./textures/sketch/portalred.png","portalBlue":"./textures/sketch/portalblue.png","splats":"./textures/sketch/splats.png","popularity":131822559,"popularityScore":"132"},{"name":"Brioche Light","author":"Brioche","url":"briochelight","tiles":"./textures/briochelight/tiles.png","speedpad":"./textures/briochelight/speedpad.png","speedpadRed":"./textures/briochelight/speedpadred.png","speedpadBlue":"./textures/briochelight/speedpadblue.png","portal":"./textures/briochelight/portal.png","portalRed":"./textures/briochelight/portalred.png","portalBlue":"./textures/briochelight/portalblue.png","splats":"./textures/briochelight/splats.png","popularity":124794058,"popularityScore":"125"},{"name":"Electric","author":"Bug","url":"electric","tiles":"./textures/electric/tiles.png","speedpad":"./textures/electric/speedpad.png","speedpadRed":"./textures/electric/speedpadred.png","speedpadBlue":"./textures/electric/speedpadblue.png","portal":"./textures/electric/portal.png","portalRed":"./textures/electric/portalred.png","portalBlue":"./textures/electric/portalblue.png","splats":"./textures/electric/splats.png","popularity":120779889,"popularityScore":"121"},{"name":"Sharp","author":"MagicPigeon","url":"sharp","tiles":"./textures/sharp/tiles.png","speedpad":"./textures/sharp/speedpad.png","speedpadRed":"./textures/sharp/speedpadred.png","speedpadBlue":"./textures/sharp/speedpadblue.png","portal":"./textures/sharp/portal.png","portalRed":"./textures/sharp/portalred.png","portalBlue":"./textures/sharp/portalblue.png","splats":"./textures/sharp/splats.png","popularity":102695276,"popularityScore":"103"},{"name":"PastelPro","author":"SuperTed","url":"pastelpro","tiles":"./textures/pastelpro/tiles.png","speedpad":"./textures/pastelpro/speedpad.png","speedpadRed":"./textures/pastelpro/speedpadred.png","speedpadBlue":"./textures/pastelpro/speedpadblue.png","portal":"./textures/pastelpro/portal.png","portalRed":"./textures/pastelpro/portalred.png","portalBlue":"./textures/pastelpro/portalblue.png","splats":"./textures/pastelpro/splats.png","popularity":101273597,"popularityScore":"101"},{"name":"Element+","author":"MagicPigeon","url":"element","tiles":"./textures/element/tiles.png","speedpad":"./textures/element/speedpad.png","speedpadRed":"./textures/element/speedpadred.png","speedpadBlue":"./textures/element/speedpadblue.png","portal":"./textures/element/portal.png","portalRed":"./textures/element/portalred.png","portalBlue":"./textures/element/portalblue.png","splats":"./textures/element/splats.png","popularity":96832425,"popularityScore":"97"},{"name":"nom","author":"anom","url":"nom","tiles":"./textures/nom/tiles.png","speedpad":"./textures/nom/speedpad.png","speedpadRed":"./textures/nom/speedpadred.png","speedpadBlue":"./textures/nom/speedpadblue.png","portal":"./textures/nom/portal.png","portalRed":"./textures/nom/portalred.png","portalBlue":"./textures/nom/portalblue.png","splats":"./textures/nom/splats.png","popularity":79099132,"popularityScore":"79"},{"name":"Mural","author":"DaEvil1","url":"mural","tiles":"./textures/mural/tiles.png","speedpad":"./textures/mural/speedpad.png","speedpadRed":"./textures/mural/speedpadred.png","speedpadBlue":"./textures/mural/speedpadblue.png","portal":"./textures/mural/portal.png","portalRed":"./textures/mural/portalred.png","portalBlue":"./textures/mural/portalblue.png","splats":"./textures/mural/splats.png","popularity":71163135,"popularityScore":"71"},{"name":"Circlejerk","author":"Bizkut and Ion","url":"circlejerk","tiles":"./textures/circlejerk/tiles.png","speedpad":"./textures/circlejerk/speedpad.png","speedpadRed":"./textures/circlejerk/speedpadred.png","speedpadBlue":"./textures/circlejerk/speedpadblue.png","portal":"./textures/circlejerk/portal.png","portalRed":"./textures/circlejerk/portalred.png","portalBlue":"./textures/circlejerk/portalblue.png","splats":"./textures/circlejerk/splats.png","popularity":69117406,"popularityScore":"69"},{"name":"Supreme","author":"bicycle","url":"supreme","tiles":"./textures/supreme/tiles.png","speedpad":"./textures/supreme/speedpad.png","speedpadRed":"./textures/supreme/speedpadred.png","speedpadBlue":"./textures/supreme/speedpadblue.png","portal":"./textures/supreme/portal.png","portalRed":"./textures/supreme/portalred.png","portalBlue":"./textures/supreme/portalblue.png","splats":"./textures/supreme/splats.png","popularity":67563977,"popularityScore":"68"},{"name":"Turbo","author":"Ooops","url":"turbo","tiles":"./textures/turbo/tiles.png","speedpad":"./textures/turbo/speedpad.png","speedpadRed":"./textures/turbo/speedpadred.png","speedpadBlue":"./textures/turbo/speedpadblue.png","portal":"./textures/turbo/portal.png","portalRed":"./textures/turbo/portalred.png","portalBlue":"./textures/turbo/portalblue.png","splats":"./textures/turbo/splats.png","popularity":60858581,"popularityScore":"61"},{"name":"Starlight","author":"MagicPigeon","url":"starlight","tiles":"./textures/starlight/tiles.png","speedpad":"./textures/starlight/speedpad.png","speedpadRed":"./textures/starlight/speedpadred.png","speedpadBlue":"./textures/starlight/speedpadblue.png","portal":"./textures/starlight/portal.png","portalRed":"./textures/starlight/portalred.png","portalBlue":"./textures/starlight/portalblue.png","splats":"./textures/starlight/splats.png","popularity":53494248,"popularityScore":"53"},{"name":"TerminalPX","author":"pooppants","url":"terminalpx","tiles":"./textures/terminalpx/tiles.png","speedpad":"./textures/terminalpx/speedpad.png","speedpadRed":"./textures/terminalpx/speedpadred.png","speedpadBlue":"./textures/terminalpx/speedpadblue.png","portal":"./textures/terminalpx/portal.png","portalRed":"./textures/terminalpx/portalred.png","portalBlue":"./textures/terminalpx/portalblue.png","splats":"./textures/terminalpx/splats.png","popularity":50670810,"popularityScore":"51"},{"name":"Crystal","author":"MagicPigeon","url":"crystal","tiles":"./textures/crystal/tiles.png","speedpad":"./textures/crystal/speedpad.png","speedpadRed":"./textures/crystal/speedpadred.png","speedpadBlue":"./textures/crystal/speedpadblue.png","portal":"./textures/crystal/portal.png","portalRed":"./textures/crystal/portalred.png","portalBlue":"./textures/crystal/portalblue.png","splats":"./textures/crystal/splats.png","popularity":42201094,"popularityScore":"42"},{"name":"Granata","author":"_Coffee_","url":"granata","tiles":"./textures/granata/tiles.png","speedpad":"./textures/granata/speedpad.png","speedpadRed":"./textures/granata/speedpadred.png","speedpadBlue":"./textures/granata/speedpadblue.png","portal":"./textures/granata/portal.png","portalRed":"./textures/granata/portalred.png","portalBlue":"./textures/granata/portalblue.png","splats":"./textures/granata/splats.png","popularity":37741745,"popularityScore":"38"},{"name":"Brioche Extra Light","author":"Brioche","url":"briocheextralight","tiles":"./textures/briocheextralight/tiles.png","speedpad":"./textures/briocheextralight/speedpad.png","speedpadRed":"./textures/briocheextralight/speedpadred.png","speedpadBlue":"./textures/briocheextralight/speedpadblue.png","portal":"./textures/briocheextralight/portal.png","portalRed":"./textures/briocheextralight/portalred.png","portalBlue":"./textures/briocheextralight/portalblue.png","splats":"./textures/briocheextralight/splats.png","popularity":37593404,"popularityScore":"38"},{"name":"Bold","author":"MagicPigeon","url":"bold","tiles":"./textures/bold/tiles.png","speedpad":"./textures/bold/speedpad.png","speedpadRed":"./textures/bold/speedpadred.png","speedpadBlue":"./textures/bold/speedpadblue.png","portal":"./textures/bold/portal.png","portalRed":"./textures/bold/portalred.png","portalBlue":"./textures/bold/portalblue.png","splats":"./textures/bold/splats.png","popularity":36969229,"popularityScore":"37"},{"name":"Jello","author":"MC Ride","url":"jello","tiles":"./textures/jello/tiles.png","speedpad":"./textures/jello/speedpad.png","speedpadRed":"./textures/jello/speedpadred.png","speedpadBlue":"./textures/jello/speedpadblue.png","portal":"./textures/jello/portal.png","portalRed":"./textures/jello/portalred.png","portalBlue":"./textures/jello/portalblue.png","splats":"./textures/jello/splats.png","popularity":32300816,"popularityScore":"32"},{"name":"Celeste","author":"MagicPigeon","url":"celeste","tiles":"./textures/celeste/tiles.png","speedpad":"./textures/celeste/speedpad.png","speedpadRed":"./textures/celeste/speedpadred.png","speedpadBlue":"./textures/celeste/speedpadblue.png","portal":"./textures/celeste/portal.png","portalRed":"./textures/celeste/portalred.png","portalBlue":"./textures/celeste/portalblue.png","splats":"./textures/celeste/splats.png","popularity":30403142,"popularityScore":"30"},{"name":"Mumbo","author":"MagicPigeon","url":"mumbo","tiles":"./textures/mumbo/tiles.png","speedpad":"./textures/mumbo/speedpad.png","speedpadRed":"./textures/mumbo/speedpadred.png","speedpadBlue":"./textures/mumbo/speedpadblue.png","portal":"./textures/mumbo/portal.png","portalRed":"./textures/mumbo/portalred.png","portalBlue":"./textures/mumbo/portalblue.png","splats":"./textures/mumbo/splats.png","popularity":28354752,"popularityScore":"28"},{"name":"Brioche Deluxe","author":"Bumballbee and Brioche","url":"briochedeluxe","tiles":"./textures/briochedeluxe/tiles.png","speedpad":"./textures/briochedeluxe/speedpad.png","speedpadRed":"./textures/briochedeluxe/speedpadred.png","speedpadBlue":"./textures/briochedeluxe/speedpadblue.png","portal":"./textures/briochedeluxe/portal.png","portalRed":"./textures/briochedeluxe/portalred.png","portalBlue":"./textures/briochedeluxe/portalblue.png","splats":"./textures/briochedeluxe/splats.png","popularity":28327422,"popularityScore":"28"},{"name":"Flat (Bug)","author":"Bug","url":"flatbug","tiles":"./textures/flatbug/tiles.png","speedpad":"./textures/flatbug/speedpad.png","speedpadRed":"./textures/flatbug/speedpadred.png","speedpadBlue":"./textures/flatbug/speedpadblue.png","portal":"./textures/flatbug/portal.png","portalRed":"./textures/flatbug/portalred.png","portalBlue":"./textures/flatbug/portalblue.png","splats":"./textures/flatbug/splats.png","popularity":23080679,"popularityScore":"23"},{"name":"Maxima","author":"MagicPigeon","url":"maxima","tiles":"./textures/maxima/tiles.png","speedpad":"./textures/maxima/speedpad.png","speedpadRed":"./textures/maxima/speedpadred.png","speedpadBlue":"./textures/maxima/speedpadblue.png","portal":"./textures/maxima/portal.png","portalRed":"./textures/maxima/portalred.png","portalBlue":"./textures/maxima/portalblue.png","splats":"./textures/maxima/splats.png","popularity":19773182,"popularityScore":"20"},{"name":"Wave","author":"Waterwheel","url":"wave","tiles":"./textures/wave/tiles.png","speedpad":"./textures/wave/speedpad.png","speedpadRed":"./textures/wave/speedpadred.png","speedpadBlue":"./textures/wave/speedpadblue.png","portal":"./textures/wave/portal.png","portalRed":"./textures/wave/portalred.png","portalBlue":"./textures/wave/portalblue.png","splats":"./textures/wave/splats.png","popularity":18482467,"popularityScore":"18"},{"name":"TagPro Next Classic","author":"KoalaBeast, MagicPigeon, Ronding","url":"tagpronextclassic","tiles":"./textures/tagpronextclassic/tiles.png","speedpad":"./textures/tagpronextclassic/speedpad.png","speedpadRed":"./textures/tagpronextclassic/speedpadred.png","speedpadBlue":"./textures/tagpronextclassic/speedpadblue.png","portal":"./textures/tagpronextclassic/portal.png","portalRed":"./textures/tagpronextclassic/portalred.png","portalBlue":"./textures/tagpronextclassic/portalblue.png","splats":"./textures/tagpronextclassic/splats.png","popularity":18473431,"popularityScore":"18"},{"name":"Chip","author":"anom","url":"chip","tiles":"./textures/chip/tiles.png","speedpad":"./textures/chip/speedpad.png","speedpadRed":"./textures/chip/speedpadred.png","speedpadBlue":"./textures/chip/speedpadblue.png","portal":"./textures/chip/portal.png","portalRed":"./textures/chip/portalred.png","portalBlue":"./textures/chip/portalblue.png","splats":"./textures/chip/splats.png","popularity":18099894,"popularityScore":"18"},{"name":"Funko","author":"MC Ride","url":"funko","tiles":"./textures/funko/tiles.png","speedpad":"./textures/funko/speedpad.png","speedpadRed":"./textures/funko/speedpadred.png","speedpadBlue":"./textures/funko/speedpadblue.png","portal":"./textures/funko/portal.png","portalRed":"./textures/funko/portalred.png","portalBlue":"./textures/funko/portalblue.png","splats":"./textures/funko/splats.png","popularity":16308531,"popularityScore":"16"},{"name":"Softpaint","author":"Xcissors ft. anom","url":"softpaint","tiles":"./textures/softpaint/tiles.png","speedpad":"./textures/softpaint/speedpad.png","speedpadRed":"./textures/softpaint/speedpadred.png","speedpadBlue":"./textures/softpaint/speedpadblue.png","portal":"./textures/softpaint/portal.png","portalRed":"./textures/softpaint/portalred.png","portalBlue":"./textures/softpaint/portalblue.png","splats":"./textures/softpaint/splats.png","popularity":10590160,"popularityScore":"11"},{"name":"Blacklight","author":"MC Ride","url":"blacklight","tiles":"./textures/blacklight/tiles.png","speedpad":"./textures/blacklight/speedpad.png","speedpadRed":"./textures/blacklight/speedpadred.png","speedpadBlue":"./textures/blacklight/speedpadblue.png","portal":"./textures/blacklight/portal.png","portalRed":"./textures/blacklight/portalred.png","portalBlue":"./textures/blacklight/portalblue.png","splats":"./textures/blacklight/splats.png","popularity":7810387,"popularityScore":"8"},{"name":"Yin & Yang","author":"_Coffee_","url":"yinyang","tiles":"./textures/yinyang/tiles.png","speedpad":"./textures/yinyang/speedpad.png","speedpadRed":"./textures/yinyang/speedpadred.png","speedpadBlue":"./textures/yinyang/speedpadblue.png","portal":"./textures/yinyang/portal.png","portalRed":"./textures/yinyang/portalred.png","portalBlue":"./textures/yinyang/portalblue.png","splats":"./textures/yinyang/splats.png","popularity":5034296,"popularityScore":"5"},{"name":"Return","author":"Flaccid Trip","url":"return","tiles":"./textures/return/tiles.png","speedpad":"./textures/return/speedpad.png","speedpadRed":"./textures/return/speedpadred.png","speedpadBlue":"./textures/return/speedpadblue.png","portal":"./textures/return/portal.png","portalRed":"./textures/return/portalred.png","portalBlue":"./textures/return/portalblue.png","splats":"./textures/return/splats.png","popularity":4875846,"popularityScore":"5"},{"name":"Grace","author":"Moosen","url":"grace","tiles":"./textures/grace/tiles.png","speedpad":"./textures/grace/speedpad.png","speedpadRed":"./textures/grace/speedpadred.png","speedpadBlue":"./textures/grace/speedpadblue.png","portal":"./textures/grace/portal.png","portalRed":"./textures/grace/portalred.png","portalBlue":"./textures/grace/portalblue.png","splats":"./textures/grace/splats.png","popularity":4726603,"popularityScore":"5"},{"name":"Afloat","author":"Pingu","url":"afloat","tiles":"./textures/afloat/tiles.png","speedpad":"./textures/afloat/speedpad.png","speedpadRed":"./textures/afloat/speedpadred.png","speedpadBlue":"./textures/afloat/speedpadblue.png","portal":"./textures/afloat/portal.png","portalRed":"./textures/afloat/portalred.png","portalBlue":"./textures/afloat/portalblue.png","splats":"./textures/afloat/splats.png","popularity":3790622,"popularityScore":"4"},{"name":"Spongepack","author":"_Coffee_","url":"spongepack","tiles":"./textures/spongepack/tiles.png","speedpad":"./textures/spongepack/speedpad.png","speedpadRed":"./textures/spongepack/speedpadred.png","speedpadBlue":"./textures/spongepack/speedpadblue.png","portal":"./textures/spongepack/portal.png","portalRed":"./textures/spongepack/portalred.png","portalBlue":"./textures/spongepack/portalblue.png","splats":"./textures/spongepack/splats.png","popularity":3111494,"popularityScore":"3"},{"name":"Twine","author":"Flaccid Trip","url":"twine","tiles":"./textures/twine/tiles.png","speedpad":"./textures/twine/speedpad.png","speedpadRed":"./textures/twine/speedpadred.png","speedpadBlue":"./textures/twine/speedpadblue.png","portal":"./textures/twine/portal.png","portalRed":"./textures/twine/portalred.png","portalBlue":"./textures/twine/portalblue.png","splats":"./textures/twine/splats.png","popularity":2959408,"popularityScore":"3"},{"name":"Ancient Gems","author":"Flaccid Trip ft. jazzz","url":"ancientgems","tiles":"./textures/ancientgems/tiles.png","speedpad":"./textures/ancientgems/speedpad.png","speedpadRed":"./textures/ancientgems/speedpadred.png","speedpadBlue":"./textures/ancientgems/speedpadblue.png","portal":"./textures/ancientgems/portal.png","portalRed":"./textures/ancientgems/portalred.png","portalBlue":"./textures/ancientgems/portalblue.png","splats":"./textures/ancientgems/splats.png","popularity":1515595,"popularityScore":"2"},{"name":"Bowling","author":"_Coffee_","url":"bowling","tiles":"./textures/bowling/tiles.png","speedpad":"./textures/bowling/speedpad.png","speedpadRed":"./textures/bowling/speedpadred.png","speedpadBlue":"./textures/bowling/speedpadblue.png","portal":"./textures/bowling/portal.png","portalRed":"./textures/bowling/portalred.png","portalBlue":"./textures/bowling/portalblue.png","splats":"./textures/bowling/splats.png","popularity":915843,"popularityScore":"1"},{"name":"Supreme Shine","author":"Flaccid Trip","url":"supremeshine","tiles":"./textures/supremeshine/tiles.png","speedpad":"./textures/supremeshine/speedpad.png","speedpadRed":"./textures/supremeshine/speedpadred.png","speedpadBlue":"./textures/supremeshine/speedpadblue.png","portal":"./textures/supremeshine/portal.png","portalRed":"./textures/supremeshine/portalred.png","portalBlue":"./textures/supremeshine/portalblue.png","splats":"./textures/supremeshine/splats.png","popularity":382069,"popularityScore":"0"},{"name":"Xmas","author":"jazzz","url":"xmas","tiles":"./textures/xmas/tiles.png","speedpad":"./textures/xmas/speedpad.png","speedpadRed":"./textures/xmas/speedpadred.png","speedpadBlue":"./textures/xmas/speedpadblue.png","portal":"./textures/xmas/portal.png","portalRed":"./textures/xmas/portalred.png","portalBlue":"./textures/xmas/portalblue.png","splats":"./textures/xmas/splats.png","popularity":298298,"popularityScore":"0"},{"name":"Purple","author":"SuperTed & mc ride","url":"purple","tiles":"./textures/purple/tiles.png","speedpad":"./textures/purple/speedpad.png","speedpadRed":"./textures/purple/speedpadred.png","speedpadBlue":"./textures/purple/speedpadblue.png","portal":"./textures/purple/portal.png","portalRed":"./textures/purple/portalred.png","portalBlue":"./textures/purple/portalblue.png","splats":"./textures/purple/splats.png","popularity":0,"popularityScore":"0"}]
+</div>
+<div class="hidden" id="current-pack">
+    false
+</div>
+<div class="hidden" id="logged-in">
+    false
+</div>
+
+        <!-- start userscript site-wide bottom -->
+        <div id="userscript-bottom" class="hidden">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 userscript-template hidden">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end userscript site-wide bottom -->
+
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3 col-sm-3">
+                        <div class="visible-xs text-center">
+                            <img src="./images/KoalaBeast.png?v=bambi1">
+                            <div class="copyright">
+                                &copy; <span class="js-copyright-date">2016</span>
+                                Koalabeast Games
+                            </div>
+                        </div>
+                        <div class="hidden-xs">
+                            <img src="./images/KoalaBeast.png?v=bambi1">
+                            <div class="copyright">
+                                &copy; <span class="js-copyright-date">2016</span>
+                                Koalabeast Games
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <div class="row">
+                            <div class="col-sm-4 col-xs-12">
+                                <h3 class="header-title"><s>Tag</s>BambiPro</h3>
+                                <ul>
+                                    <li><a href="mailto:tagpro@koalabeast.com">Support</a></li>
+                                    <li><a href="https://docs.google.com/document/d/1n90H8CXwr_yNVWsxrcbPDZl2qhUd9JN9FWX-0qw0Qew/edit?usp=sharing" target="_blank">Code of Conduct</a></li>
+                                    <li><a href="https://docs.google.com/document/d/1yPGNGaHY5JNh1UGVmtMGz8cDZalgGoOMCNgjnKThpPo/edit?usp=sharing" target="_blank">Privacy Policy</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                <h3 class="header-title">Community</h3>
+                                <ul>
+                                    <li><a href="https://www.reddit.com/r/tagpro" target="_blank">Subreddit</a></li>
+                                    <li><a href="https://discord.gg/hhW3MDzrt3" target="_blank">Discord</a></li>
+                                    <li><a href="https://www.reddit.com/r/tagpro/wiki/index" target="_blank">Wiki</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                <h3 class="header-title">Social Media</h3>
+                                <ul>
+                                    <li><a href="https://twitter.com/play_tagpro" target="_blank">Twitter</a></li>
+                                    <li><a href="https://www.tiktok.com/@tagpro.gg" target="_blank">TikTok</a></li>
+                                    <li><a href="https://www.youtube.com/user/KoalaBeastGames" target="_blank">YouTube</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        
+
+            <script src="./R-965af4e7a4b8-z/compact/redirect.js"></script>
+
+        
+    </body>
+</html>

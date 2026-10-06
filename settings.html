@@ -1,0 +1,480 @@
+<!doctype html> <!-- eslint-disable-line vue/no-parsing-error -->
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title></title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <meta property="og:title" content="">
+        <meta property="og:image" content="/images/thumbnail.png">
+
+        <link rel="apple-touch-icon" href="./images/thumbnail.png">
+        <link rel="shortcut icon" href="./favicon.ico">
+
+        <link rel="stylesheet" href="./R-965af4e7a4b8-z/stylesheets/bootstrap.css">
+        <link rel="stylesheet" href="./R-965af4e7a4b8-z/stylesheets/bootstrap-datepicker3.standalone.css">
+        <link rel="stylesheet" href="./R-965af4e7a4b8-z/stylesheets/bootstrap-select.css">
+        <link rel="stylesheet" href="./R-965af4e7a4b8-z/stylesheets/style.css">
+        <link rel="stylesheet" href="./R-965af4e7a4b8-z/stylesheets/font-awesome.css">
+
+        <script src="./R-965af4e7a4b8-z/compact/global-settings.js"></script>
+        
+
+        <script>
+            tagproConfig.serverPort = location.port || 80;
+            tagproConfig.serverHost = location.hostname + (tagproConfig.serverPort != 80 ? ':' + tagproConfig.serverPort : '');
+            tagproConfig.cookieHost = location.hostname;
+        </script>
+    </head>
+    <body class="body-with-footer" id="73218c3018844b2f77042c8cac92826160f2f5be9c563da1c3e2a7e5b1103130">
+
+        <div id="header" class="header">
+            <div class="container header-main">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="header-top">
+                            <div class="row">
+                                <div class="col-sm-9 col-md-7 col-lg-6">
+                                    <h1 id="logo" class="logo">
+                                            <a href="./"><img src="./images/logo.png?v=bambi1" alt="BambiPro"></a>
+                                    </h1>
+
+                                        <div class="server-stats">
+                                            <div>Stats</div>
+                                            <div>2 players in 1 game
+                                            </div>
+                                            <div>1 total users online</div>
+                                        </div>
+                                </div>
+                                <div class="col-sm-3 col-md-5 col-lg-6">
+                                    <div class="flair-log hidden-sm" id="flair-log">
+                                    </div>
+
+
+                                    <div class="userbar pull-right">
+                                            <a id="login-btn" class="btn btn-secondary" href="./login">Log In / Sign Up</a>
+                                            <a id="settings-btn" class="btn btn-default" href="./settings.html">Settings</a>
+                                    </div>
+
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                        <div id="site-nav" class="nav">
+                            <button class="mobile-menu-toggle" onclick="this.blur();">
+                            <svg width="32" height="32" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1664 1344v128q0 26-19 45t-45 19h-1408q-26 0-45-19t-19-45v-128q0-26 19-45t45-19h1408q26 0 45 19t19 45zm0-512v128q0 26-19 45t-45 19h-1408q-26 0-45-19t-19-45v-128q0-26 19-45t45-19h1408q26 0 45 19t19 45zm0-512v128q0 26-19 45t-45 19h-1408q-26 0-45-19t-19-45v-128q0-26 19-45t45-19h1408q26 0 45 19t19 45z"/></svg>
+                            </button>
+                            <div class="visible-xs clearfix"></div>
+                            <ul>
+                                <li id="nav-tagpro" class=""><a href="./"><s>Tag</s>BambiPro</a></li>
+                                <li id="nav-groups" class=""><a href="./groups">Groups<span class="group-indicator groupsAvailable bounce">&#x25cf;</span></a></li>
+                                <li id="nav-leaderboards" class=""><a  aria-disabled="true" style="pointer-events:none;opacity:.4;cursor:default">Leaders</a></li>
+                                <li id="nav-maps" class=""><a href="./maps">Maps</a></li>
+                                <li id="nav-playersearch" class=""><a href="./playersearch">Player Search</a></li>
+                                <li id="nav-competitive" class=""><a  aria-disabled="true" style="pointer-events:none;opacity:.4;cursor:default">Competitive</a></li>
+                                <li id="nav-replays" class=""><a href="./replays">Replays</a></li>
+                                <li id="nav-feedback" class=""><a href="./feedback">Feedback<span id="feedback-indicator" style="display: none;" class="group-indicator bounce">&#x25cf;</span></a></li>
+
+                                    <li class="nav-mobile"><a href="./login">Log In / Sign Up</a></li>
+                                    <li class="nav-mobile"><a href="./settings.html">Settings</a></li>
+                            </ul>
+                        </div>
+            </div>
+        </div>
+
+        <!-- start userscript site-wide top -->
+        <div id="userscript-top" class="hidden">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 userscript-template hidden">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end userscript site-wide top -->
+
+        <div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-offset-3 col-md-6">
+                    <div class="card">
+                        <h1 class="">Settings</h1>
+                        <form class="form form-horizontal" action="" method="post">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">
+                                    Texture Packs
+                                </label>
+                                <div class="col-sm-8 form-link">
+                                    <a class="btn btn-default" href="./textures.html">Change Texture Pack</a>
+                                    <div class="checkbox">
+                                        <label >
+                                            <input name="disableBallSpin" type="checkbox" class="js-cookie">
+                                            Enable Ball Spin
+                                        </label>
+                                    </div>
+                                    <div class="selectBox">
+                                        <label>Tile Respawn Warnings:</label>
+                                        <div class="">
+                                            <select id="tileRespawnWarnings" name="tileRespawnWarnings" class="form-control js-cookie">
+                                                <option value="blink">Blink</option>
+                                                <option value="pizza">Pizza</option>
+                                                <option value="alpha">Transparent</option>
+                                                <option value="none">None</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input name="disableNextPupIndicators" type="checkbox" class="js-cookie">
+                                            Enable Next Power-up Indicators
+                                        </label>
+                                    </div>
+                                    <div class="selectBox">
+                                        Next Power-up Indicator Opacity:
+                                        <input  class="js-cookie" type="range" name="powerupAlpha" min="0.05" max="1" step=".05" oninput="powerupAlphaOutput.value = Math.floor(this.value*100)+'%'" style="display: inline-block; width: 75%; margin-right: 1rem;">
+                                        <output style="color: #fff;display: inline-block;" id="powerupAlphaOutput">0</output>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">
+                                    Video Settings
+                                </label>
+                                <div class="col-sm-8">
+                                    <div class="checkbox">
+                                        <label >
+                                            <input name="disableParticles" type="checkbox" class="js-cookie">
+                                            Enable Particle Effects
+                                        </label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label >
+                                            <input name="forceCanvasRenderer" type="checkbox" class="js-cookie">
+                                            Enable WebGL Rendering
+                                        </label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label >
+                                            <input name="disableViewportScaling" type="checkbox" class="js-cookie">
+                                            Enable Viewport Scaling
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">
+                                    Audio Settings
+                                </label>
+                                <div class="col-sm-8">
+                                    <div class="checkbox">
+                                        <label >
+                                            <input name="sound" type="checkbox" class="js-cookie js-cookie-inverse">
+                                            Play Sound Effects
+                                        </label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label >
+                                            <input name="music" type="checkbox" class="js-cookie js-cookie-inverse">
+                                            Play Music
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">
+                                    Notification Settings
+                                </label>
+                                <div class="col-sm-8">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input name="notifyGameStart" id="notifyGameStart" type="checkbox" class="js-cookie js-cookie-inverse">
+                                            <abbr title="Sends a desktop pop-up notification when you've joined a game in a background tab. Must be supported by your browser.">Notify When Game Starts</abbr>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">
+                                    Chat
+                                </label>
+                                <div class="col-sm-8">
+                                    <div class="checkbox">
+                                        <label >
+                                            <input name="disableTutorialChat" type="checkbox" class="js-cookie">
+                                            Enable Tutorial Messages
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">
+                                    Key Remapping
+                                </label>
+                                <div class="col-sm-8 form-link">
+                                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#remapModal">Change Keyboard Controls</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">
+                                    Chat Macros
+                                </label>
+                                <div class="col-sm-8 form-link">
+                                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#macroModal">Change Chat Macros</button>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="form-group">
+                                <div class="col-sm-12 text-center">
+                                    <div class="form-status" style="margin-bottom: 10px;"></div>
+                                    <button id="saveSettings" class="btn btn-primary" type="submit">Save Settings</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="remapModal" tabindex="-1" role="dialog" aria-labelledby="remapModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn btn-default close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="remapModalLabel">Key Remapping</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-4 text-center">
+                        <small>Remap Configuration:</small>
+                    </div>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="remapConfig">
+                            <option value="primary">Primary</option>
+                            <option value="secondary">Secondary</option>
+                        </select>
+                    </div>
+                </div>
+                <p class="text-center"><small>Both the primary and secondary key bindings can be used while playing.</small></p>
+                <hr>
+
+                <div id="remapContainer">
+                    <p class="remap-instructions remapping">Click a Button</p>
+                    <div class="remap-keys-container">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td colspan="2">
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        <div class="remap-key-background space"></div>
+                                        <div class="remap-key space">
+                                            <p class="control-text control-name">Space</p>
+                                            <p class="control-text control-text-small control-direction">Activate Rolling Bomb</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table id="keyRemapTable">
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <div class="remap-key-background"></div>
+                                        <div class="remap-key up">
+                                            <p class="control-text control-name">Up</p>
+                                            <p class="control-text control-direction">⯅</p>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="remap-key-background"></div>
+                                        <div class="remap-key left">
+                                            <p class="control-text control-name">Left</p>
+                                            <p class="control-text control-direction">⯇</p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="remap-key-background"></div>
+                                        <div class="remap-key down">
+                                            <p class="control-text control-name">Down</p>
+                                            <p class="control-text control-direction">⯆</p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="remap-key-background"></div>
+                                        <div class="remap-key right">
+                                            <p class="control-text control-name">Right</p>
+                                            <p class="control-text control-direction">⯈</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="remap-key-background"></div>
+                                        <div class="remap-key mark">
+                                            <p class="control-text control-name">Slash</p>
+                                            <p class="control-text control-direction">📷</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <p class="status-message"></p>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveRemapBtn">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div><!-- Modal -->
+<div class="modal fade" id="macroModal" tabindex="-1" role="dialog" aria-labelledby="macroModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn btn-default close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="macroModalLabel">Chat Macros</h4>
+            </div>
+            <div class="modal-body">
+                <div id="macroContainer">
+                    <table class="table table-borderless" id="chatMacroTable">
+                        <thead>
+                            <tr>
+                                <th>Key</th>
+                                <th>Target</th>
+                                <th>Text</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="macro-key">
+                                        <div class="macro remap-key-background"></div>
+                                        <div class="macro remap-key">
+                                            <p class="control-text"></p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <select class="form-control target-select">
+                                        <option value="team">Team</option>
+                                        <option value="all">All</option>
+                                    </select>
+                                </td>
+                                <td class="chat-macro-text-row">
+                                    <input type="text" class="form-control chat-macro-text" placeholder="Chat message" maxlength="70">
+                                </td>
+                                <td>
+                                    <button class="btn btn-default">&times;</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button type="button" class="btn btn-primary" id="createMacroBtn">+ Create new Chat Macro</button>
+                </div>
+            </div>
+            <p class="status-message text-center" style="margin-top: 0; width: 100%"></p>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveMacrosBtn">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <!-- start userscript site-wide bottom -->
+        <div id="userscript-bottom" class="hidden">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 userscript-template hidden">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end userscript site-wide bottom -->
+
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3 col-sm-3">
+                        <div class="visible-xs text-center">
+                            <img src="./images/KoalaBeast.png?v=bambi1">
+                            <div class="copyright">
+                                &copy; <span class="js-copyright-date">2016</span>
+                                Koalabeast Games
+                            </div>
+                        </div>
+                        <div class="hidden-xs">
+                            <img src="./images/KoalaBeast.png?v=bambi1">
+                            <div class="copyright">
+                                &copy; <span class="js-copyright-date">2016</span>
+                                Koalabeast Games
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <div class="row">
+                            <div class="col-sm-4 col-xs-12">
+                                <h3 class="header-title"><s>Tag</s>BambiPro</h3>
+                                <ul>
+                                    <li><a href="mailto:tagpro@koalabeast.com">Support</a></li>
+                                    <li><a href="https://docs.google.com/document/d/1n90H8CXwr_yNVWsxrcbPDZl2qhUd9JN9FWX-0qw0Qew/edit?usp=sharing" target="_blank">Code of Conduct</a></li>
+                                    <li><a href="https://docs.google.com/document/d/1yPGNGaHY5JNh1UGVmtMGz8cDZalgGoOMCNgjnKThpPo/edit?usp=sharing" target="_blank">Privacy Policy</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                <h3 class="header-title">Community</h3>
+                                <ul>
+                                    <li><a href="https://www.reddit.com/r/tagpro" target="_blank">Subreddit</a></li>
+                                    <li><a href="https://discord.gg/hhW3MDzrt3" target="_blank">Discord</a></li>
+                                    <li><a href="https://www.reddit.com/r/tagpro/wiki/index" target="_blank">Wiki</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                <h3 class="header-title">Social Media</h3>
+                                <ul>
+                                    <li><a href="https://twitter.com/play_tagpro" target="_blank">Twitter</a></li>
+                                    <li><a href="https://www.tiktok.com/@tagpro.gg" target="_blank">TikTok</a></li>
+                                    <li><a href="https://www.youtube.com/user/KoalaBeastGames" target="_blank">YouTube</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        
+
+            <script src="./R-965af4e7a4b8-z/compact/redirect.js"></script>
+
+        
+    </body>
+</html>

@@ -1,0 +1,519 @@
+<!doctype html> <!-- eslint-disable-line vue/no-parsing-error -->
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>BambiPro</title>
+        <meta name="description" content="Grab the other team's flag and bring it back to yours.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <meta property="og:image" content="/images/thumbnail.png">
+        <meta property="og:url" content="http://bambipro.gg">
+            <meta property="og:title" content="BambiPro Capture the Flag">
+            <meta property="og:description" content="Grab the other team's flag and bring it back to yours">
+
+        <link rel="apple-touch-icon" href="./images/thumbnail.png">
+        <link rel="shortcut icon" href="./favicon.ico" id="favicon">
+
+        <link rel="stylesheet" href="./R-62bb0909b74c-z/stylesheets/bootstrap.css">
+        <link rel="stylesheet" href="./R-62bb0909b74c-z/stylesheets/font-awesome.css">
+        <link rel="stylesheet" href="./R-62bb0909b74c-z/stylesheets/style.css">
+
+            <script src="./R-62bb0909b74c-z/compact/global-game.js"></script>
+                <script>window.tplClientBox2D = window.Box2D;</script>
+        <script src="./engine/box2d.js"></script>
+        <script src="./engine/constants.js"></script>
+        <script src="./engine/mapLoader.js"></script>
+        <script src="./engine/game.js"></script>
+        <script src="./engine/botBrain.js"></script>
+        <script>window.Box2D = window.tplClientBox2D;</script>
+        <script src="./engine/local-game.js"></script>
+    <script type="text/javascript">
+        tagproConfig.regionConfig = [{"name":"US East","displayName":"US East","cookieName":"region_us_east","statKey":"NAE","rankedKey":null,"ranked":false,"presetKey":"e"},{"name":"US Central","displayName":"US Central","cookieName":"region_us_central","statKey":"NAC","rankedKey":"na","ranked":true,"presetKey":"c"},{"name":"US West","displayName":"US West","cookieName":"region_us_west","statKey":"NAW","rankedKey":null,"ranked":false,"presetKey":"w"},{"name":"Europe","displayName":"Europe","cookieName":"region_europe","statKey":"EU","rankedKey":"eu","ranked":true,"presetKey":"u"},{"name":"Oceanic","displayName":"Oceania","cookieName":"region_oceanic","statKey":"OC","rankedKey":"oc","ranked":true,"presetKey":"o"}];
+        tagproConfig.musicHost = location.host;
+        tagproConfig.cdn = location.host;
+        tagproConfig.cacheBuster = "/R-62bb0909b74c-z";
+        tagproConfig.enableShaders = false;
+        tagproConfig.eventMusic = undefined;
+        tagproConfig.joiner = false;
+    </script>
+
+        <script>
+            tagproConfig.gameSocket = location.origin + "/local";
+            tagproConfig.gameServer = "local";
+            tagproConfig.gameId = "local";
+            tagproConfig.serverPort = location.port || 80;
+            tagproConfig.serverHost = location.hostname + (tagproConfig.serverPort != 80 ? ':' + tagproConfig.serverPort : '');
+            tagproConfig.cookieHost = location.hostname;
+        </script>
+    </head>
+    <body class="game-page">
+
+        <div class="hidden" id="textures">
+    ""
+</div>
+<div class="game">
+
+    <div id="sound">
+        <div id="soundEffects"></div>
+        <div id="soundMusic"></div>
+        <input id="volumeSlider" type="range" min="-50" max="0"/>
+    </div>
+
+    <canvas id="viewport" width="1280" height="800"></canvas>
+
+    <div class="exitContainer">
+        <a id="exit"   href="./"> &lt; Exit</a>
+    </div>
+    <div id="lastGameToggleContainer" style="display: none;">
+        <span class="joinerIndicator"></span>
+        <span id="lastGameToggle">
+            <i id="lastGamePlay" title="Continue playing after this" class="fa fa-arrow-circle-right"></i>
+            <i id="lastGameStop" title="Stop playing after this game" class="fa fa-circle-stop"></i>
+        </span>
+        <span id="rankedReady">
+            <i title="Ranked game ready!" class="fa fa-trophy"></i>
+        </span>
+        <span class="joinerIndicator right"></span>
+    </div>
+
+
+    <div class="message"></div>
+    <div id="loadingMessage">Loading...</div>
+
+    <div id="postgame-container">
+        <div id="options">
+
+            <div id="replayInfo" class="hide">
+                Replay: <a id="replayLink" href="">Link</a>
+                <span data-copyhelper="replayLink"></span>
+            </div>
+            <div id="gameSocket">
+                This browser
+            </div>
+
+            <div id="mapInfo"></div>
+            <div id="flairInfo"></div>
+            <div id="musicInfo"></div>
+
+            <table id="stats" class="table table-stripped">
+                <thead>
+                    <tr>
+                        <th data-column="player">Player</th>
+                        <th data-column="score" Title="Total Impact per Minute"> Score </th>
+                        <th data-column="oscore" Title="Offense Impact per Minute"> O </th>
+                        <th data-column="dscore" Title="Defense Impact per Minute)"> D </th>
+                        <th data-column="tags">Tags</th>
+                        <th data-column="pops">Popped</th>
+                        <th data-column="grabs">Grabs</th>
+                        <th data-column="drops">Drops</th>
+                        <th data-column="hold">Hold</th>
+                        <th data-column="captures">Captures</th>
+                        <th data-column="prevent">Prevent</th>
+                        <th data-column="returns">Returns</th>
+                        <th data-column="support">Support</th>
+                        <th data-column="powerups">Power-ups</th>
+                        <th data-column="tagcoins">Tagcoins</th>
+                        <th data-column="active">Active</th>
+                        <th data-column="report"></th>
+                    </tr>
+                </thead>
+                <tbody class="stats">
+                    <tr class="template">
+                        <td data-column="player">
+                            <span class="scoreAuth"></span>
+                            &nbsp;
+                            <span class="scoreName clickableText"></span>
+                            <span class="dnf"></span>
+                            <i title="New to TagPro!" class="fa-brands fa-envira newPlayerIndicator hidden"></i>
+                        </td>
+                        <td class="t-ipm" data-column="score"></td>
+                        <td class="o-ipm" data-column="oscore"></td>
+                        <td class="d-ipm" data-column="dscore"></td>
+                        <td data-column="tags"></td>
+                        <td data-column="pops"></td>
+                        <td data-column="grabs"></td>
+                        <td data-column="drops"></td>
+                        <td data-column="hold"></td>
+                        <td data-column="captures"></td>
+                        <td data-column="prevent"></td>
+                        <td data-column="returns"></td>
+                        <td data-column="support"></td>
+                        <td data-column="powerups"></td>
+                        <td data-column="tagcoins"></td>
+                        <td data-column="active"></td>
+                        <td data-column="report">
+                            <span class="kick link">report/mute</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="form-options">
+                <div id="optionsName">
+                    <label>Name</label>
+                    <input id="name" maxlength="12" class="form-control">
+                </div>
+
+                <div id="mapRatingContainer">
+                        <label>Rate Map</label>
+                        <select id="mapRating" class="form-control">
+                            <option value="">(Select)</option>
+                            <option value="1">I like it</option>
+                            <option value="0">I'm Indifferent</option>
+                            <option value="-1">I dislike it</option>
+                        </select>
+                </div>
+
+                <div id="optionsLinks">
+                    <a href="https://www.reddit.com/r/TagPro/" target="_blank">
+                        <div class="social-link">
+                            <svg width="24" height="24" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
+                                <path  d="M1067 1129q13 13 0 26-53 53-171 53t-171-53q-13-13 0-26 5-6 13-6t13 6q42 42 145 42t145-42q5-6 13-6t13 6zm-263-156q0 31-23 54t-54 23-54-23-23-54q0-32 22.5-54.5t54.5-22.5 54.5 22.5 22.5 54.5zm338 0q0 31-23 54t-54 23-54-23-23-54q0-32 22.5-54.5t54.5-22.5 54.5 22.5 22.5 54.5zm215-103q0-42-30-72t-73-30q-42 0-73 31-113-78-267-82l54-243 171 39q1 32 23.5 54t53.5 22q32 0 54.5-22.5t22.5-54.5-22.5-54.5-54.5-22.5q-48 0-69 43l-189-42q-17-5-21 13l-60 268q-154 6-265 83-30-32-74-32-43 0-73 30t-30 72q0 30 16 55t42 38q-5 25-5 48 0 122 120 208.5t289 86.5q170 0 290-86.5t120-208.5q0-25-6-49 25-13 40.5-37.5t15.5-54.5zm307-454v960q0 119-84.5 203.5t-203.5 84.5h-960q-119 0-203.5-84.5t-84.5-203.5v-960q0-119 84.5-203.5t203.5-84.5h960q119 0 203.5 84.5t84.5 203.5z"/>
+                            </svg>
+                            <span>Subreddit</span>
+                        </div>
+                    </a>
+
+                    <a href="https://discord.gg/hhW3MDzrt3" target="_blank">
+                        <div class="social-link">
+                            <svg width="24" height="24" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M 1664 416 L 1664 1376 C 1664 1455.333 1635.833 1523.167 1579.5 1579.5 C 1523.167 1635.833 1455.333 1664 1376 1664 L 416 1664 C 336.667 1664 268.833 1635.833 212.5 1579.5 C 156.167 1523.167 128 1455.333 128 1376 L 128 416 C 128 336.667 156.167 268.833 212.5 212.5 C 268.833 156.167 336.667 128 416 128 L 1376 128 C 1455.333 128 1523.167 156.167 1579.5 212.5 C 1635.833 268.833 1664 336.667 1664 416 Z M 1242.633 577.99 C 1178.881 548.737 1110.513 527.184 1039.032 514.841 C 1037.732 514.604 1036.431 515.198 1035.76 516.389 C 1026.968 532.027 1017.228 552.428 1010.409 568.463 C 933.526 556.953 857.038 556.953 781.733 568.463 C 774.912 552.071 764.818 532.027 755.986 516.389 C 755.315 515.238 754.016 514.642 752.714 514.841 C 681.272 527.146 612.906 548.698 549.113 577.99 C 548.561 578.228 548.087 578.626 547.774 579.141 C 418.098 772.874 382.574 961.845 400.001 1148.473 C 400.08 1149.387 400.592 1150.26 401.302 1150.814 C 486.859 1213.645 569.734 1251.789 651.071 1277.072 C 652.373 1277.469 653.752 1276.994 654.581 1275.921 C 673.821 1249.646 690.972 1221.942 705.677 1192.807 C 706.546 1191.102 705.717 1189.076 703.943 1188.402 C 676.739 1178.083 650.835 1165.501 625.917 1151.212 C 623.945 1150.061 623.788 1147.242 625.601 1145.892 C 630.845 1141.962 636.089 1137.875 641.096 1133.746 C 642.003 1132.994 643.265 1132.835 644.33 1133.31 C 808.03 1208.049 985.255 1208.049 1147.023 1133.31 C 1148.087 1132.795 1149.35 1132.953 1150.295 1133.708 C 1155.304 1137.835 1160.546 1141.962 1165.831 1145.892 C 1167.644 1147.242 1167.525 1150.061 1165.555 1151.212 C 1140.637 1165.779 1114.732 1178.083 1087.489 1188.362 C 1085.714 1189.038 1084.926 1191.102 1085.793 1192.807 C 1100.815 1221.901 1117.965 1249.606 1136.851 1275.881 C 1137.639 1276.994 1139.058 1277.469 1140.361 1277.072 C 1222.091 1251.789 1304.966 1213.645 1390.523 1150.814 C 1391.273 1150.26 1391.746 1149.425 1391.825 1148.512 C 1412.682 932.75 1356.892 745.328 1243.934 579.18 C 1243.658 578.626 1243.185 578.228 1242.633 577.99 Z M 730.123 1034.836 C 680.838 1034.836 640.229 989.589 640.229 934.02 C 640.229 878.453 680.051 833.206 730.123 833.206 C 780.589 833.206 820.805 878.849 820.017 934.02 C 820.017 989.589 780.194 1034.836 730.123 1034.836 Z M 1062.492 1034.836 C 1013.207 1034.836 972.598 989.589 972.598 934.02 C 972.598 878.453 1012.419 833.206 1062.492 833.206 C 1112.959 833.206 1153.173 878.849 1152.386 934.02 C 1152.386 989.589 1112.959 1034.836 1062.492 1034.836 Z"/>
+                            </svg>
+                            <span>Discord</span>
+                        </div>
+                    </a>
+
+                    <a href="https://twitter.com/play_tagpro" target="_blank">
+                        <div class="social-link">
+                            <svg width="24" height="24" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
+                                <path  d="M1408 610q-56 25-121 34 68-40 93-117-65 38-134 51-61-66-153-66-87 0-148.5 61.5t-61.5 148.5q0 29 5 48-129-7-242-65t-192-155q-29 50-29 106 0 114 91 175-47-1-100-26v2q0 75 50 133.5t123 72.5q-29 8-51 8-13 0-39-4 21 63 74.5 104t121.5 42q-116 90-261 90-26 0-50-3 148 94 322 94 112 0 210-35.5t168-95 120.5-137 75-162 24.5-168.5q0-18-1-27 63-45 105-109zm256-194v960q0 119-84.5 203.5t-203.5 84.5h-960q-119 0-203.5-84.5t-84.5-203.5v-960q0-119 84.5-203.5t203.5-84.5h960q119 0 203.5 84.5t84.5 203.5z"/>
+                            </svg>
+                            <span>Twitter</span>
+                        </div>
+                    </a>
+
+                    <a href="https://www.tiktok.com/@tagpro.gg" target="_blank">
+                        <div class="social-link">
+                            <svg width="24" height="24" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M 1481.146 128 L 310.854 128 C 210.028 128 128 210.028 128 310.854 L 128 1481.146 C 128 1581.972 210.028 1664 310.854 1664 L 1481.146 1664 C 1581.972 1664 1664 1581.972 1664 1481.146 L 1664 310.854 C 1664 210.028 1581.972 128 1481.146 128 M 1335.079 798.098 C 1326.687 798.91 1318.27 799.342 1309.843 799.378 C 1217.414 799.388 1131.208 752.801 1080.576 675.475 L 1080.576 1097.401 C 1080.576 1337.457 820.704 1487.494 612.81 1367.465 C 404.911 1247.438 404.911 947.36 612.81 827.332 C 660.216 799.961 713.989 785.555 768.731 785.555 C 775.238 785.555 781.601 786.138 788.005 786.539 L 788.005 940.216 C 781.601 939.447 775.312 938.276 768.731 938.276 C 646.211 938.276 569.633 1070.91 630.895 1177.015 C 659.326 1226.258 711.867 1256.594 768.731 1256.594 C 856.649 1256.594 934.291 1187.327 934.291 1099.409 L 935.825 382.826 L 1082.845 382.826 C 1096.705 514.664 1203.013 617.643 1335.226 627.309 L 1335.226 798.098"/>
+                            </svg>
+                            <span>TikTok</span>
+                        </div>
+                    </a>
+
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+
+            <div>
+                    <a id="switchButton" href="switch" class="">Switch Teams</a>
+                    <a id="tutorialButton" href="switch" class="">Disable Tips</a>
+            </div>
+
+            <div id="optionsAd">
+                
+                <!-- TagPro In-Game Scoreboard -->
+                
+            </div>
+        </div>
+
+        <div id="rankedPostGameOverlay" class="ranked-postgame-overlay" style="display: none;">
+            <div class="postgame-card">
+                <div class="postgame-header">Ranked Results</div>
+                <div class="postgame-teams">
+                    <div class="postgame-team red-team">
+                        <div class="team-header">
+                            Red Team
+                            <span class="team-win-prob" title="Win Probability">
+                                <i class="fa fa-chart-pie"></i>
+                                <span class="win-prob-value"></span>
+                            </span>
+                        </div>
+                        <div class="team-players" id="postgame-red-players"></div>
+                    </div>
+                    <div class="postgame-team blue-team">
+                        <div class="team-header">
+                            Blue Team
+                            <span class="team-win-prob" title="Win Probability">
+                                <i class="fa fa-chart-pie"></i>
+                                <span class="win-prob-value"></span>
+                            </span>
+                        </div>
+                        <div class="team-players" id="postgame-blue-players"></div>
+                    </div>
+                </div>
+                <div class="postgame-player-template" style="display: none;">
+                    <div class="postgame-player">
+                        <span class="postgame-player-name">
+                            <span class="postgame-tier-badge"></span>
+                            <span class="postgame-player-display-name"></span>
+                        </span>
+                        <span class="postgame-skill-delta"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="kick">
+        <h3 class="smaller">
+            Report Player: <span id="kickPlayer"></span> <span>?</span>
+        </h3>
+
+        <p class="center">
+                This can result in a temporary ban for them.
+        </p>
+        <p class="center">
+            <label class="larger">Reason:</label>
+            <select id="kickSelect" class="form-control">
+                <option value="0">select reason to report...</option>
+                <option value="14">unwelcoming to a new player</option>
+                <option value="11">offensive/insulting/harassing chat</option>
+                <option value="12">spamming or advertising in chat</option>
+                <option value="1">offensive name</option>
+                <option value="3">working against own team</option>
+                <option value="4">afk too much</option>
+                <option value="8">cheating or botting</option>
+            </select>
+        </p>
+
+        <div class="text-center">
+            <a id="kickButton" href="#" class="btn btn-primary">Report</a>
+        </div>
+            <div class="text-divider">
+                <label>OR</label>
+            </div>
+            <div class="text-center">
+                    <a id="personalMuteButton" href="#" class="btn btn-primary"></a>
+            </div>
+        <div class="text-center">
+            <a id="kickCancelButton" href="#" class="btn btn-primary">Cancel</a>
+        </div>
+
+    </div>
+
+    <div id="sendToPreferred">
+            <h3>
+                Sending you to&nbsp;<span id="preferredServer"></span><span>&nbsp;in&nbsp;</span><span id="countdown"></span>
+            </h3>
+
+            <a id="sendToPreferredCancel" href="cancel" class="button">Stay Here</a>
+    </div>
+
+    <input id="groupId" type="hidden" value="null">
+    <input id="privateGame" type="hidden" value="true">
+    <input id="rankedGame" type="hidden" value="false">
+    <input id="isMod" type="hidden" value="">
+    <input id="isMonitor" type="hidden" value="">
+
+    <div id="chatHistory"></div>
+
+    <input id="chat" maxlength="70" autocomplete="off">
+
+    <div id="joiner" style="display: none;">
+        <div id="joiner-settings" class="" style="display: none;">
+            <div class="title">Joiner Settings</div>
+            <div id="regions">
+                <div class="queue-select-message">
+    Connecting...
+</div>
+<div class="queue-select-options">
+    <div id="casual-display">
+            <div class="joiner-header">CASUAL REGIONS</div>
+        <ul class="region-list show">
+            <li>
+                <div class="joiner-display">
+                    <label class="joiner-automatic">
+                        <input name="Automatic" id="region_auto" class="child-check" type="checkbox">
+                        Automatic
+                    </label>
+                </div>
+            </li>
+                <li>
+                    <div class="joiner-display">
+                        <label>
+                            <input name="US East"  type="checkbox" class="js-region-cookie joiner-option" data-region="US East" cookie="region_us_east">
+                            US East
+                        </label>
+                    </div>
+                </li>
+                <li>
+                    <div class="joiner-display">
+                        <label>
+                            <input name="US Central"  type="checkbox" class="js-region-cookie joiner-option" data-region="US Central" cookie="region_us_central">
+                            US Central
+                        </label>
+                    </div>
+                </li>
+                <li>
+                    <div class="joiner-display">
+                        <label>
+                            <input name="US West"  type="checkbox" class="js-region-cookie joiner-option" data-region="US West" cookie="region_us_west">
+                            US West
+                        </label>
+                    </div>
+                </li>
+                <li>
+                    <div class="joiner-display">
+                        <label>
+                            <input name="Europe"  type="checkbox" class="js-region-cookie joiner-option" data-region="Europe" cookie="region_europe">
+                            Europe
+                        </label>
+                    </div>
+                </li>
+                <li>
+                    <div class="joiner-display">
+                        <label>
+                            <input name="Oceania"  type="checkbox" class="js-region-cookie joiner-option" data-region="Oceanic" cookie="region_oceanic">
+                            Oceania
+                        </label>
+                    </div>
+                </li>
+        </ul>
+            <div class="waiting-options">While you wait:</div>
+    </div>
+        <div class="joiner-display">
+            <label>
+                <input name="Minigames"  type="checkbox" class="js-game-mode-cookie joiner-option" data-queue="minigames" cookie="waiting_minigames">
+                    Minigames
+            </label>
+        </div>
+</div>            </div>
+
+
+            <div class="message-container">
+                <div class="joiner-message"></div>
+                <div class="ranked-stats"></div>
+                <div class="group-member-stats"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="assets">
+        <img id="tiles" src="./textures/musclescupgradients/tiles.png" class="asset">
+        <img id="splats" src="./textures/musclescupgradients/splats.png" class="asset">
+        <img id="flair" src="./R-62bb0909b74c-z/images/flair.png" class="asset">
+        <img id="indicators" src="./R-62bb0909b74c-z/images/indicators.png" class="asset">
+        <img id="speedpad" src="./textures/musclescupgradients/speedpad.png" class="asset">
+        <img id="speedpadred" src="./textures/musclescupgradients/speedpadred.png" class="asset">
+        <img id="speedpadblue" src="./textures/musclescupgradients/speedpadblue.png" class="asset">
+        <img id="portal" src="./textures/musclescupgradients/portal.png" class="asset">
+        <img id="portalred" src="./textures/musclescupgradients/portalred.png" class="asset">
+        <img id="portalblue" src="./textures/musclescupgradients/portalblue.png" class="asset">
+        <img id="particle" src="./textures/classic/particle.png" class="asset">
+        <img id="particleFire" src="./textures/classic/particle-fire.png" class="asset">
+        <img id="gravityWell" src="./textures/classic/gravitywell.png" class="asset">
+        <img id="particleChampion" src="./textures/classic/champion.png" class="asset">
+
+
+
+                    <audio id="burst" preload="auto">
+                <source src="./sounds/burst.mp3" type="audio/mp3">
+                <source src="./sounds/burst.m4a" type="audio/m4a">
+                <source src="./sounds/burst.ogg" type="audio/ogg">
+            </audio>
+                    <audio id="alert" preload="auto">
+                <source src="./sounds/alert.mp3" type="audio/mp3">
+                <source src="./sounds/alert.m4a" type="audio/m4a">
+                <source src="./sounds/alert.ogg" type="audio/ogg">
+            </audio>
+                    <audio id="cheering" preload="auto">
+                <source src="./sounds/cheering.mp3" type="audio/mp3">
+                <source src="./sounds/cheering.m4a" type="audio/m4a">
+                <source src="./sounds/cheering.ogg" type="audio/ogg">
+            </audio>
+                    <audio id="drop" preload="auto">
+                <source src="./sounds/drop.mp3" type="audio/mp3">
+                <source src="./sounds/drop.m4a" type="audio/m4a">
+                <source src="./sounds/drop.ogg" type="audio/ogg">
+            </audio>
+                    <audio id="sigh" preload="auto">
+                <source src="./sounds/sigh.mp3" type="audio/mp3">
+                <source src="./sounds/sigh.m4a" type="audio/m4a">
+                <source src="./sounds/sigh.ogg" type="audio/ogg">
+            </audio>
+                    <audio id="powerup" preload="auto">
+                <source src="./sounds/powerup.mp3" type="audio/mp3">
+                <source src="./sounds/powerup.m4a" type="audio/m4a">
+                <source src="./sounds/powerup.ogg" type="audio/ogg">
+            </audio>
+                    <audio id="pop" preload="auto">
+                <source src="./sounds/pop.mp3" type="audio/mp3">
+                <source src="./sounds/pop.m4a" type="audio/m4a">
+                <source src="./sounds/pop.ogg" type="audio/ogg">
+            </audio>
+                    <audio id="click" preload="auto">
+                <source src="./sounds/click.mp3" type="audio/mp3">
+                <source src="./sounds/click.m4a" type="audio/m4a">
+                <source src="./sounds/click.ogg" type="audio/ogg">
+            </audio>
+                    <audio id="explosion" preload="auto">
+                <source src="./sounds/explosion.mp3" type="audio/mp3">
+                <source src="./sounds/explosion.m4a" type="audio/m4a">
+                <source src="./sounds/explosion.ogg" type="audio/ogg">
+            </audio>
+                    <audio id="countdown" preload="auto">
+                <source src="./sounds/countdown.mp3" type="audio/mp3">
+                <source src="./sounds/countdown.m4a" type="audio/m4a">
+                <source src="./sounds/countdown.ogg" type="audio/ogg">
+            </audio>
+                    <audio id="friendlydrop" preload="auto">
+                <source src="./sounds/friendlydrop.mp3" type="audio/mp3">
+                <source src="./sounds/friendlydrop.m4a" type="audio/m4a">
+                <source src="./sounds/friendlydrop.ogg" type="audio/ogg">
+            </audio>
+                    <audio id="friendlyalert" preload="auto">
+                <source src="./sounds/friendlyalert.mp3" type="audio/mp3">
+                <source src="./sounds/friendlyalert.m4a" type="audio/m4a">
+                <source src="./sounds/friendlyalert.ogg" type="audio/ogg">
+            </audio>
+                    <audio id="alertlong" preload="auto">
+                <source src="./sounds/alertlong.mp3" type="audio/mp3">
+                <source src="./sounds/alertlong.m4a" type="audio/m4a">
+                <source src="./sounds/alertlong.ogg" type="audio/ogg">
+            </audio>
+                    <audio id="go" preload="auto">
+                <source src="./sounds/go.mp3" type="audio/mp3">
+                <source src="./sounds/go.m4a" type="audio/m4a">
+                <source src="./sounds/go.ogg" type="audio/ogg">
+            </audio>
+                    <audio id="degreeup" preload="auto">
+                <source src="./sounds/degreeup.mp3" type="audio/mp3">
+                <source src="./sounds/degreeup.m4a" type="audio/m4a">
+                <source src="./sounds/degreeup.ogg" type="audio/ogg">
+            </audio>
+                    <audio id="teleport" preload="auto">
+                <source src="./sounds/teleport.mp3" type="audio/mp3">
+                <source src="./sounds/teleport.m4a" type="audio/m4a">
+                <source src="./sounds/teleport.ogg" type="audio/ogg">
+            </audio>
+                    <audio id="bing" preload="auto">
+                <source src="./sounds/bing.mp3" type="audio/mp3">
+                <source src="./sounds/bing.m4a" type="audio/m4a">
+                <source src="./sounds/bing.ogg" type="audio/ogg">
+            </audio>
+                    <audio id="mark" preload="auto">
+                <source src="./sounds/mark.mp3" type="audio/mp3">
+                <source src="./sounds/mark.m4a" type="audio/m4a">
+                <source src="./sounds/mark.ogg" type="audio/ogg">
+            </audio>
+
+        <audio id="wind" preload="auto" loop data-ramp="true">
+            <source src="./sounds/wind.mp3" type="audio/mp3">
+            <source src="./sounds/wind.m4a" type="audio/m4a">
+            <source src="./sounds/wind.ogg" type="audio/ogg">
+        </audio>
+        <audio id="overtime" preload="auto">
+            <source src="./sounds/overtime.mp3" type="audio/mp3">
+        </audio>
+    </div>
+</div>
+
+        
+
+        
+        <script>window.tplApplyTextures && tplApplyTextures();</script>
+    </body>
+</html>

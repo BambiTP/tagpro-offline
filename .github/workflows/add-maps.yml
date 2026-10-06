@@ -1,0 +1,37 @@
+# Adds maps from Fortunate Maps to the site: Actions tab -> "Add maps" -> Run workflow, then
+# enter map numbers or links (separated by spaces or commas). The maps are committed to maps/
+# and show up on the home page once GitHub Pages redeploys (a minute or two).
+name: Add maps
+
+on:
+  workflow_dispatch:
+    inputs:
+      maps:
+        description: 'Fortunate Maps map numbers or links, e.g. 69860 12345'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  add:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Download maps
+        env:
+          MAPS: ${{ inputs.maps }}
+        run: node tools/add-maps.js "$MAPS"
+      - name: Commit
+        env:
+          MAPS: ${{ inputs.maps }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add maps
+          git diff --cached --quiet && echo "No new maps." && exit 0
+          git commit -m "Add maps: $MAPS"
+          git push
