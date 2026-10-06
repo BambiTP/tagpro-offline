@@ -28,6 +28,19 @@ No dependencies: plain JavaScript (Node 18+ to train, any modern browser to watc
 | `png.js` | A small PNG decoder so Node can read `maps/*.png`. |
 | `index.html` | The viewer: watch the agent, compare it with the baseline, or race it yourself. |
 
+## Models
+
+`models/boost-policy.json` is the one the viewer and demos load (a copy of `boost-policy-walls.json`).
+`boost-policy-open.json` was trained 7.7M steps in open arenas; `boost-policy-walls.json` is that
+model fine-tuned 4M more steps with wall blocks. On 1000 held-out episodes against "steer straight at
+the target":
+
+| Setting | Agent | Straight line |
+| --- | --- | --- |
+| Open arena, pickup anywhere near the spawn | 3.40 s | 4.03 s |
+| Open arena, pickup on the way half the time | 3.58 s | 4.27 s |
+| 6 wall blocks | 4.80 s (90% reached) | 5.65 s (91% reached) |
+
 ## Train (headless)
 
 ```sh
