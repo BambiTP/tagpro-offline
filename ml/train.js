@@ -7,7 +7,8 @@
 // Options: --steps N  --envs N (games per worker)  --nsteps N (decisions per game per update)
 //   --epochs N  --mb N (minibatch)  --lr X  --ent X (entropy bonus)  --pickup boost|bomb|both
 //   --onpath X (chance the pickup is put on the way to the target; curriculum, default 0.5)
-//   --size N  --blocks N  --seed N  --workers N  --hidden N  --eval N  --out FILE  --resume
+//   --size N  --blocks N  --seed N  --workers N  --hidden N  --eval N  --out FILE
+//   --resume (keep training the --out model)  --from FILE (start from this model, save to --out)
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
@@ -144,12 +145,14 @@ function main() {
   const piBuf = new SharedArrayBuffer(piLen * 8), vfBuf = new SharedArrayBuffer(vfLen * 8);
   const pi = sharedNet(piSizes, piBuf), vf = sharedNet(vfSizes, vfBuf);
   let prev = null;
-  if (opt.resume && fs.existsSync(opt.out)) {
-    prev = JSON.parse(fs.readFileSync(opt.out, 'utf8'));
+  const from = typeof opt.from === 'string' ? opt.from : opt.resume ? opt.out : null;
+  if (from && !fs.existsSync(from)) throw new Error(`no model at ${from}`);
+  if (from) {
+    prev = JSON.parse(fs.readFileSync(from, 'utf8'));
     const a = MLP.fromJSON(prev.policy), b = MLP.fromJSON(prev.value);
     if (String(a.sizes) !== String(piSizes)) throw new Error(`saved model has layers ${a.sizes}, not ${piSizes} (--hidden)`);
     pi.params().forEach((p, k) => p.set(a.params()[k])); vf.params().forEach((p, k) => p.set(b.params()[k]));
-    console.log('resuming', path.relative(process.cwd(), opt.out), `(${(prev.trainedSteps / 1e6).toFixed(2)}M steps)`);
+    console.log('starting from', path.relative(process.cwd(), from), `(${(prev.trainedSteps / 1e6).toFixed(2)}M steps)`);
   } else {
     const rand = rng(opt.seed);
     const a = new MLP(piSizes, rand, 0.01), b = new MLP(vfSizes, rand, 1);
@@ -184,8 +187,9 @@ function main() {
   const updates = Math.ceil(opt.steps / N);
   let totalSteps = (prev && prev.trainedSteps) || 0;
   // a checkpoint is kept when it beats the best so far, measured as time saved vs the straight-line
-  // driver on the same episodes
-  let best = prev && prev.stats ? prev.stats.agent.meanSeconds - prev.stats.baseline.meanSeconds : Infinity;
+  // driver on the same episodes (a resumed model trained on other settings starts over)
+  const sameEnv = prev && prev.env && ['size', 'blocks', 'pickup', 'onPath'].every((k) => prev.env[k] === envOpts[k]);
+  let best = sameEnv && prev.stats ? prev.stats.agent.meanSeconds - prev.stats.baseline.meanSeconds : Infinity;
   let recent = [];
   const pct = (x) => (100 * x).toFixed(0) + '%';
 
