@@ -1560,6 +1560,7 @@ class GameRoom {
   }
 
   afkCheck(now) {
+    if (this.settings.noAfkKick) return; // single player: nobody is waiting on you
     for (const p of Object.values(this.players)) {
       const idle = now - Math.max(p.lastInput, this.startedPlayAt || 0);
       const kickAt = this.settings.mapTestingMode ? TU.MAPTEST_AFK_KICK_MS : TU.AFK_KICK_MS;

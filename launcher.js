@@ -7,7 +7,9 @@
   const MAX_TILES = 256;
   const FM_OPTION = '#fm'; // the map list's "Fortunate Maps ID..." entry
   let fmProxies = []; // config.json: sites that pass Fortunate Maps files on to this page (see README)
-  let siteMaps = [], defaults = {};
+  let siteMaps = [], defaults = {}, spec = [];
+  // single player starts with no mercy rule (the group default is +3)
+  const LOCAL_DEFAULTS = { mercyRule: 0 };
 
   const store = {
     get(k, def) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : def; } catch (e) { return def; } },
@@ -141,23 +143,86 @@
       name: $id('name').value.trim().slice(0, 12), map: $id('map').value, mode: $id('mode').value,
       team: document.querySelector('input[name=team]:checked').value === '2' ? 2 : 1,
       allies: num($id('allies').value, 0, 3, 0), enemies: num($id('enemies').value, 0, 4, 0),
-      time: num($id('time').value, 1, 60, 6), caps: num($id('caps').value, 0, 100, 0), mapTestingMode: $id('maptest').checked,
+      settings: readSettings(),
     };
     store.set('tpl-last', choice);
     try { sessionStorage.setItem('tpl-game', JSON.stringify(Object.assign({}, choice, { map, defaults }))); } catch (e) { return showError("This browser won't let the page keep the game settings (private mode?)."); }
     location.href = choice.mode === 'eggball' ? './eggball.html' : './game.html';
   });
 
+  // ---- game settings: every group setting (settings.json, read from the group page at build time) ----
+  const startValue = (key) => (key in LOCAL_DEFAULTS ? LOCAL_DEFAULTS[key] : defaults[key]);
+  // the page's string -> the type the game uses (the type of the setting's default)
+  function typed(key, v) {
+    const d = defaults[key];
+    if (typeof d === 'boolean') return v === true || v === 'true';
+    if (typeof d === 'number') { const n = Number(v); return Number.isFinite(n) ? n : d; }
+    return String(v);
+  }
+  function renderSettings(saved) {
+    const box = $id('settings');
+    box.textContent = '';
+    let section = '';
+    for (const s of spec) {
+      if (s.section !== section) {
+        section = s.section;
+        const h = document.createElement('div'); h.className = 'set-section'; h.textContent = section; box.appendChild(h);
+      }
+      const row = document.createElement('label'); row.className = 'set-row';
+      const name = document.createElement('span'); name.textContent = s.label;
+      let input;
+      if (s.type === 'bool') { input = document.createElement('input'); input.type = 'checkbox'; }
+      else if (s.type === 'select') {
+        input = document.createElement('select'); input.className = 'form-control';
+        for (const [v, t] of s.options) { const o = document.createElement('option'); o.value = v; o.textContent = t; input.appendChild(o); }
+      } else {
+        input = document.createElement('input'); input.className = 'form-control';
+        if (s.type === 'number') { input.type = 'number'; input.min = 0; input.max = 99; } else input.maxLength = 12;
+      }
+      input.dataset.key = s.key;
+      row.append(name, input);
+      box.appendChild(row);
+      setInput(input, saved && s.key in saved ? saved[s.key] : startValue(s.key));
+    }
+    markChanged();
+  }
+  function setInput(input, v) {
+    if (input.type === 'checkbox') input.checked = v === true || v === 'true';
+    else {
+      input.value = String(v);
+      // a value the list doesn't have (e.g. an old default): add it so it isn't lost
+      if (input.tagName === 'SELECT' && input.value !== String(v)) { const o = document.createElement('option'); o.value = o.textContent = String(v); input.appendChild(o); input.value = String(v); }
+    }
+  }
+  const inputs = () => [...$id('settings').querySelectorAll('[data-key]')];
+  function readSettings() {
+    const out = {};
+    for (const i of inputs()) out[i.dataset.key] = typed(i.dataset.key, i.type === 'checkbox' ? i.checked : i.value);
+    return out;
+  }
+  function markChanged() {
+    let n = 0;
+    for (const i of inputs()) {
+      const changed = typed(i.dataset.key, i.type === 'checkbox' ? i.checked : i.value) !== typed(i.dataset.key, startValue(i.dataset.key));
+      i.parentElement.classList.toggle('changed', changed);
+      if (changed) n++;
+    }
+    $id('settings-changed').textContent = n ? `(${n} changed)` : '';
+  }
+  const saveSettings = () => store.set('tpl-last', Object.assign(store.get('tpl-last', {}), { settings: readSettings() }));
+  $id('settings').addEventListener('change', () => { markChanged(); saveSettings(); });
+  $id('settings-reset').addEventListener('click', () => { renderSettings(null); saveSettings(); });
+
   // ---- start: the site's maps, the defaults, and the last choices ----
   const config = fetch('./config.json').then((r) => r.json()).catch(() => ({}));
-  Promise.all([fetch('./maps/index.json').then((r) => r.json()), fetch('./defaults.json').then((r) => r.json()), config]).then(([maps, defs, conf]) => {
-    siteMaps = maps; defaults = defs;
+  Promise.all([fetch('./maps/index.json').then((r) => r.json()), fetch('./defaults.json').then((r) => r.json()), fetch('./settings.json').then((r) => r.json()), config]).then(([maps, defs, settingsSpec, conf]) => {
+    siteMaps = maps; defaults = defs; spec = settingsSpec;
     fmProxies = (Array.isArray(conf.fortunateMapsProxies) ? conf.fortunateMapsProxies : []).map(String);
     const last = store.get('tpl-last', {});
     $id('name').value = last.name || '';
-    for (const k of ['mode', 'allies', 'enemies', 'time', 'caps']) if (last[k] != null) $id(k).value = last[k];
+    for (const k of ['mode', 'allies', 'enemies']) if (last[k] != null) $id(k).value = last[k];
     if (last.team === 2) document.querySelector('input[name=team][value="2"]').checked = true;
-    $id('maptest').checked = !!last.mapTestingMode;
+    renderSettings(last.settings);
     fillMaps(last.map || 'random');
   }).catch(() => showError("The map list couldn't be loaded."));
 })();

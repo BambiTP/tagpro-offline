@@ -29,6 +29,14 @@
             .local #fm-status { margin-top: 8px; }
             .local #fm-status a { text-decoration: underline; }
             .local #forget { margin-top: 6px; }
+            .local details { margin-top: 16px; }
+            .local summary { cursor: pointer; font-weight: bold; font-size: 16px; }
+            .local .set-section { margin: 14px 0 2px; font-weight: bold; opacity: .85; border-bottom: 1px solid rgba(255,255,255,.15); padding-bottom: 2px; }
+            .local .set-row { display: flex; align-items: center; gap: 12px; margin: 6px 0; }
+            .local .set-row > span { flex: 1; min-width: 0; }
+            .local .set-row > .form-control { flex: 0 0 48%; max-width: 48%; height: 30px; padding: 2px 8px; }
+            .local .set-row > input[type=checkbox] { margin: 0 6px; }
+            .local .set-row.changed > span { color: #8bc34a; }
         </style>
     </head>
     <body>
@@ -77,18 +85,11 @@
                 </div>
                 <div class="hint">No bots: you have the map to yourself to practice.</div>
 
-                <div class="row-2">
-                    <div>
-                        <label for="time">Length (minutes)</label>
-                        <input class="form-control" id="time" type="number" min="1" max="60" value="6">
-                    </div>
-                    <div>
-                        <label for="caps">Cap limit (0 = none)</label>
-                        <input class="form-control" id="caps" type="number" min="0" max="100" value="0">
-                    </div>
-                </div>
-
-                <label class="inline" style="margin-top:12px"><input type="checkbox" id="maptest"> Map testing mode (reset the map with a key, longer AFK time)</label>
+                <details id="settings-box">
+                    <summary>Game settings <span class="hint" id="settings-changed"></span></summary>
+                    <div id="settings"></div>
+                    <button class="btn btn-default btn-sm" id="settings-reset" type="button" style="margin-top:12px">Back to defaults</button>
+                </details>
 
                 <button class="btn btn-primary play" type="submit">Play</button>
             </form>
