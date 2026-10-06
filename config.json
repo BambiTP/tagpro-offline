@@ -1,3 +1,5 @@
 {
-  "fortunateMapsProxies": []
+  "fortunateMapsProxies": [
+    "https://cors.bambitp.workers.dev/?url="
+  ]
 }

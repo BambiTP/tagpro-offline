@@ -13,8 +13,9 @@ how many bots, then press Play. With no bots you have the map to yourself to pra
 - **Fortunate Maps, from the home page:** pick "Fortunate Maps ID..." in the Map list and enter
   a map number or link. Browsers only let a page read files from another site if that site
   allows it, and Fortunate Maps doesn't, so the page also tries each proxy listed in
-  `config.json` (`"fortunateMapsProxies": ["https://your-proxy.example"]`; a proxy answers
-  `/png/<id>` and `/json/<id>` with `Access-Control-Allow-Origin: *`). With none that works, it
+  `config.json` (`"fortunateMapsProxies": ["https://cors.bambitp.workers.dev/?url="]`: each is a
+  prefix the encoded Fortunate Maps URL is added to, and must answer with
+  `Access-Control-Allow-Origin`). With none that works, it
   gives you links to the two files to save and add under "Add your own map files". Maps added
   this way are kept in your browser only.
 - **Fortunate Maps, for everyone:** in this repo's **Actions** tab, run **Add maps** and enter

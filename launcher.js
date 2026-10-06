@@ -63,10 +63,12 @@
   // ---- Fortunate Maps ----
   const fmId = (s) => { const m = String(s).trim().match(/(?:^|\/)(\d{1,9})(?:\.\w+)?\/?$/) || String(s).match(/(?:map|png|json|preview)\/(\d{1,9})/); return m ? m[1] : null; };
   // the files of map `id`: straight from Fortunate Maps, else through each proxy in config.json
+  // (a proxy is a URL prefix the Fortunate Maps URL is appended to, e.g. "https://proxy.example/?url=")
   async function fmFiles(id) {
-    for (const base of [FM].concat(fmProxies)) {
+    const via = [(u) => u].concat(fmProxies.map((p) => (u) => p + encodeURIComponent(u)));
+    for (const url of via) {
       let png, json;
-      try { [png, json] = await Promise.all([fetch(`${base}/png/${id}`), fetch(`${base}/json/${id}`)]); } catch (e) { continue; } // blocked: try the next
+      try { [png, json] = await Promise.all([fetch(url(`${FM}/png/${id}`)), fetch(url(`${FM}/json/${id}`))]); } catch (e) { continue; } // blocked: try the next
       if (png.status === 404 || json.status === 404) throw Object.assign(new Error(`Fortunate Maps has no map ${id}.`), { shown: true });
       if (png.ok && json.ok) return { png: await png.blob(), json: await json.json() };
     }
@@ -150,7 +152,7 @@
   const config = fetch('./config.json').then((r) => r.json()).catch(() => ({}));
   Promise.all([fetch('./maps/index.json').then((r) => r.json()), fetch('./defaults.json').then((r) => r.json()), config]).then(([maps, defs, conf]) => {
     siteMaps = maps; defaults = defs;
-    fmProxies = (Array.isArray(conf.fortunateMapsProxies) ? conf.fortunateMapsProxies : []).map((u) => String(u).replace(/\/+$/, ''));
+    fmProxies = (Array.isArray(conf.fortunateMapsProxies) ? conf.fortunateMapsProxies : []).map(String);
     const last = store.get('tpl-last', {});
     $id('name').value = last.name || '';
     for (const k of ['mode', 'allies', 'enemies', 'time', 'caps']) if (last[k] != null) $id(k).value = last[k];
