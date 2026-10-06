@@ -22,12 +22,11 @@ function flush() {
 }
 
 const UNREGISTERED = /^Hi! You're currently playing unregistered/; // there's no log in here
-const clone = (d) => (d === undefined ? d : JSON.parse(JSON.stringify(d))); // what a socket does to every packet
 
 // a bot: a game client whose events go straight to its brain
 function addBot(i, team) {
   let timer = null;
-  const client = { emit: (ev, d) => brain.receive(ev, clone(d)), disconnect: () => clearInterval(timer) };
+  const client = { emit: (ev, d) => brain.receive(ev, d), disconnect: () => clearInterval(timer) }; // the brain copies what it keeps
   const brain = new BotBrain(i, (ev, d) => client.onEvent && client.onEvent(ev, d));
   room.addClient(client, { publicId: 'bot' + i, name: 'Bot ' + (i + 1), auth: null }, { team });
   timer = setInterval(() => {

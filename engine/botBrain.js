@@ -68,8 +68,8 @@ class BotBrain {
     const q = [from];
     const dirs = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]];
     let found = null;
-    while (q.length && prev.size < 6000) {
-      const c = q.shift();
+    for (let head = 0; head < q.length && prev.size < 6000;) {
+      const c = q[head++]; // an index, not q.shift(): shifting a long queue is slow
       if (c.x === to.x && c.y === to.y) { found = c; break; }
       for (const [dx, dy] of dirs) {
         const nx = c.x + dx, ny = c.y + dy;
