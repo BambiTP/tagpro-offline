@@ -23,6 +23,12 @@ how many bots, then press Play. With no bots you have the map to yourself to pra
   them, and they show up for everyone once GitHub Pages redeploys. By hand:
   `node tools/add-maps.js 69860 12345`.
 
+## Boost drill AI
+
+`ml/` is a reinforcement-learning agent trained headless on this engine to reach a random target as
+fast as it can using a random boost or bomb. `node ml/train.js` trains it; open `ml/` on the site to
+watch it or race it. See [ml/README.md](ml/README.md).
+
 ## Hosting on GitHub Pages
 
 Settings -> Pages -> Build and deployment: **Deploy from a branch**, branch `main`, folder `/ (root)`.

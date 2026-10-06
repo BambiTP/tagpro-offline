@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Boost Drill AI</title>
+<link rel="icon" href="../favicon.ico">
+<style>
+  :root { --bg: #15171b; --panel: #1f2329; --text: #e6e6e6; --muted: #9aa0a8; --accent: #7ed957; --line: #33383f; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.45 system-ui, sans-serif; }
+  main { max-width: 1100px; margin: 0 auto; padding: 16px; display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr) 300px; }
+  @media (max-width: 820px) { main { grid-template-columns: 1fr; } }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  p { margin: 0 0 10px; color: var(--muted); }
+  a { color: var(--accent); }
+  .stage { position: relative; }
+  canvas { width: 100%; height: auto; display: block; background: #000; border-radius: 6px; }
+  .hud { position: absolute; left: 10px; top: 8px; font: 600 16px/1.3 ui-monospace, monospace; text-shadow: 0 1px 2px #000; pointer-events: none; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px; }
+  label { display: block; margin: 0 0 10px; color: var(--muted); font-size: 13px; }
+  select, button { width: 100%; margin-top: 3px; padding: 7px 8px; font: inherit; color: var(--text); background: #2a2f37; border: 1px solid var(--line); border-radius: 6px; }
+  button { cursor: pointer; }
+  button:hover { background: #343a44; }
+  .row { display: flex; gap: 8px; margin-bottom: 10px; }
+  .row button { margin: 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: right; padding: 3px 4px; border-bottom: 1px solid var(--line); }
+  th:first-child, td:first-child { text-align: left; }
+  #log { max-height: 180px; overflow: auto; font: 12px/1.5 ui-monospace, monospace; color: var(--muted); margin-top: 8px; }
+  .warn { color: #ffb15c; }
+  .legend span { display: inline-block; margin-right: 10px; font-size: 13px; color: var(--muted); }
+  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; }
+</style>
+</head>
+<body>
+<main>
+  <section>
+    <h1>Boost Drill AI</h1>
+    <p>A ball, one boost or bomb and a target are placed at random. The AI was trained headless on this game's
+      engine (<code>ml/train.js</code>) to reach the target as fast as it can, using the boost or the bomb when that's
+      quicker. Watch it, compare it with steering straight at the target, or try it yourself (arrow keys / WASD).</p>
+    <div class="stage">
+      <canvas id="c" width="720" height="720"></canvas>
+      <div class="hud" id="hud"></div>
+    </div>
+    <div class="legend" style="margin-top:8px">
+      <span><i class="dot" style="background:#e8453c"></i>ball</span>
+      <span><i class="dot" style="background:#ffd23f"></i>boost</span>
+      <span><i class="dot" style="background:#ff8a00"></i>bomb</span>
+      <span><i class="dot" style="background:#7ed957"></i>target</span>
+    </div>
+  </section>
+  <aside class="panel">
+    <label>Driver
+      <select id="driver">
+        <option value="agent">AI agent</option>
+        <option value="straight">Straight line (no pickups)</option>
+        <option value="human">You (arrow keys / WASD)</option>
+      </select>
+    </label>
+    <label>Pickup
+      <select id="pickup"><option value="both">Boost or bomb</option><option value="boost">Boost</option><option value="bomb">Bomb</option></select>
+    </label>
+    <label>Arena
+      <select id="arena"><option value="0">Open arena</option><option value="4">Arena + 4 wall blocks</option><option value="8">Arena + 8 wall blocks</option><optgroup label="This site's maps (walls only)" id="maps"></optgroup></select>
+    </label>
+    <label>Speed
+      <select id="speed"><option value="0.25">0.25x</option><option value="0.5">0.5x</option><option value="1" selected>1x</option><option value="3">3x</option></select>
+    </label>
+    <div class="row"><button id="next">New layout</button><button id="replay">Replay layout</button></div>
+    <label style="display:flex;gap:6px;align-items:center;color:var(--text)"><input type="checkbox" id="auto" checked style="width:auto;margin:0"> Next layout automatically</label>
+    <table>
+      <thead><tr><th>Driver</th><th>Runs</th><th>Avg time</th><th>Used pickup</th></tr></thead>
+      <tbody id="stats"></tbody>
+    </table>
+    <div id="log"></div>
+    <p id="model" style="margin-top:10px;font-size:12px"></p>
+  </aside>
+</main>
+
+<script src="../engine/box2d.js"></script>
+<script src="../engine/constants.js"></script>
+<script src="../engine/mapLoader.js"></script>
+<script src="../engine/game.js"></script>
+<script src="nn.js"></script>
+<script src="env.js"></script>
+<script src="policy.js"></script>
+<script>
+(function () {
+  const { BoostEnv, straightLine, ACTIONS } = TPBoostEnv;
+  const { Policy } = TPBoostPolicy;
+  const TILE = 0.4, $ = (id) => document.getElementById(id);
+  const canvas = $('c'), ctx = canvas.getContext('2d');
+  const NAMES = { agent: 'AI agent', straight: 'Straight line', human: 'You' };
+  let policy = null, env = null, layoutSeed = 1, run = null, stats = {}, keys = {};
+  const mapTiles = {}; // map key -> tiles
+
+  // the site's maps (maps/index.json), drilled on with their walls only
+  fetch('../maps/index.json').then((r) => r.json()).then((list) => {
+    for (const m of list) { if (m.key === 'eggball') continue; const o = document.createElement('option'); o.value = 'map:' + m.key; o.textContent = m.name; $('maps').appendChild(o); }
+  }).catch(() => {});
+  async function loadTiles(key) {
+    if (mapTiles[key]) return mapTiles[key];
+    const [png, json] = await Promise.all([fetch('../maps/' + encodeURIComponent(key) + '.png'), fetch('../maps/' + encodeURIComponent(key) + '.json')]);
+    const bmp = await createImageBitmap(await png.blob(), { colorSpaceConversion: 'none', premultiplyAlpha: 'none' });
+    const c = document.createElement('canvas'); c.width = bmp.width; c.height = bmp.height;
+    const g = c.getContext('2d', { willReadFrequently: true }); g.drawImage(bmp, 0, 0);
+    const map = TPMapLoader.loadMap({ width: c.width, height: c.height, data: g.getImageData(0, 0, c.width, c.height).data }, await json.json());
+    return (mapTiles[key] = map.tiles);
+  }
+
+  fetch('models/boost-policy.json').then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }).then((m) => {
+    policy = new Policy(m);
+    const s = m.stats && m.stats.agent;
+    $('model').textContent = `Model: ${(m.trainedSteps / 1e6).toFixed(1)}M training steps` + (s ? `, ${s.meanSeconds.toFixed(2)}s average in its last evaluation (straight line: ${m.stats.baseline.meanSeconds.toFixed(2)}s).` : '.');
+    newRun();
+  }).catch(() => {
+    $('model').innerHTML = '<span class="warn">No trained model found (ml/models/boost-policy.json). Run <code>node ml/train.js</code> first. You can still play or watch the straight-line driver.</span>';
+    $('driver').value = 'straight';
+    newRun();
+  });
+
+  // ---- runs ----
+  async function newRun(sameLayout) {
+    run = null; // nothing runs (or starts another run) while a map loads
+    if (!sameLayout) layoutSeed = (Math.random() * 2 ** 31) | 0;
+    const arena = $('arena').value;
+    const opts = { seed: layoutSeed, pickup: $('pickup').value };
+    if (arena.startsWith('map:')) {
+      try { opts.tiles = await loadTiles(arena.slice(4)); } catch (e) { $('arena').value = '0'; return newRun(sameLayout); }
+    } else opts.blocks = +arena;
+    env = new BoostEnv(opts);
+    const obs = env.reset();
+    const driver = $('driver').value === 'agent' && !policy ? 'straight' : $('driver').value;
+    run = { driver, obs, ticks: 0, ready: 40, trail: [], done: false, flash: null, wasAvail: true, finishedAt: 0 };
+    keys = {};
+    resize();
+  }
+
+  function decide() {
+    if (run.driver === 'agent') return policy.act(run.obs, true);
+    if (run.driver === 'straight') return straightLine(run.obs);
+    const u = keys.ArrowUp || keys.w, d = keys.ArrowDown || keys.s, l = keys.ArrowLeft || keys.a, r = keys.ArrowRight || keys.d;
+    return ACTIONS.findIndex((k) => !!k.up === !!(u && !d) && !!k.down === !!(d && !u) && !!k.left === !!(l && !r) && !!k.right === !!(r && !l));
+  }
+
+  function tick() {
+    if (run.ready > 0) { run.ready--; return; }
+    if (run.done) return;
+    // humans steer every tick; the AI (like in training) decides every 3 ticks
+    if (run.driver === 'human' || run.ticks % env.repeat === 0) {
+      if (run.ticks % env.repeat === 0) run.obs = env.observe();
+      env.setKeys(decide());
+    }
+    const reached = env.tick();
+    run.ticks++;
+    const v = env.view();
+    if (run.wasAvail && !v.pickup.available) { run.flash = { x: v.pickup.x * TILE, y: v.pickup.y * TILE, kind: v.pickup.kind, t: 0 }; run.used = true; }
+    run.wasAvail = v.pickup.available;
+    run.trail.push({ x: v.ball.x, y: v.ball.y, used: !!run.used });
+    if (run.trail.length > 400) run.trail.shift();
+    if (reached || run.ticks >= env.maxSteps * env.repeat) finish(reached);
+  }
+
+  function finish(reached) {
+    run.done = true; run.reached = reached; run.finishedAt = performance.now();
+    const secs = run.ticks / 60;
+    const s = stats[run.driver] || (stats[run.driver] = { n: 0, secs: 0, used: 0, missed: 0 });
+    if (reached) { s.n++; s.secs += secs; s.used += run.used ? 1 : 0; } else s.missed++;
+    const v = env.view();
+    const line = document.createElement('div');
+    line.textContent = `${NAMES[run.driver]}: ${reached ? secs.toFixed(2) + 's' : 'timed out'} (${v.pickup.kind} ${run.used ? 'used' : 'not used'})`;
+    $('log').prepend(line);
+    $('stats').innerHTML = Object.entries(stats).map(([k, x]) => `<tr><td>${NAMES[k]}</td><td>${x.n}${x.missed ? ' (+' + x.missed + ' missed)' : ''}</td><td>${x.n ? (x.secs / x.n).toFixed(2) + 's' : '-'}</td><td>${x.n ? Math.round(100 * x.used / x.n) + '%' : '-'}</td></tr>`).join('');
+  }
+
+  // ---- drawing ----
+  let scale = 24;
+  function resize() {
+    const W = env.room.tiles.length, H = env.room.tiles[0].length;
+    scale = Math.floor(Math.min(900 / W, 900 / H, 28));
+    canvas.width = W * scale; canvas.height = H * scale;
+  }
+  const px = (m) => (m / TILE + 0.5) * scale; // metres -> canvas (tile centres are at x * 0.4)
+
+  function draw(now) {
+    const tiles = env.room.tiles, v = env.view();
+    ctx.fillStyle = '#000'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    for (let x = 0; x < tiles.length; x++) for (let y = 0; y < tiles[0].length; y++) {
+      const t = Number(tiles[x][y]), X = x * scale, Y = y * scale;
+      if (t === 0) continue;
+      ctx.fillStyle = (x + y) % 2 ? '#2b2f36' : '#30353c';
+      if (t !== 1) ctx.fillRect(X, Y, scale, scale); // floor (also under diagonal walls)
+      if (Math.floor(t) === 1) {
+        ctx.fillStyle = '#5d636c';
+        ctx.beginPath();
+        const c = [[X, Y], [X + scale, Y], [X + scale, Y + scale], [X, Y + scale]];
+        const drop = { 1.1: 1, 1.2: 2, 1.3: 3, 1.4: 0 }[t]; // diagonal walls: one corner cut
+        c.filter((_, i) => i !== drop).forEach(([a, b], i) => (i ? ctx.lineTo(a, b) : ctx.moveTo(a, b)));
+        ctx.closePath(); ctx.fill();
+      }
+    }
+    // pickup
+    const pk = v.pickup, pX = px(pk.x * TILE), pY = px(pk.y * TILE);
+    ctx.globalAlpha = pk.available ? 1 : 0.25;
+    if (pk.kind === 'boost') {
+      ctx.fillStyle = '#ffd23f'; ctx.beginPath(); ctx.arc(pX, pY, scale * 0.42, 0, 7); ctx.fill();
+      ctx.fillStyle = '#7a5b00'; ctx.beginPath(); ctx.moveTo(pX - scale * 0.15, pY + scale * 0.2); ctx.lineTo(pX + scale * 0.2, pY); ctx.lineTo(pX - scale * 0.15, pY - scale * 0.2); ctx.fill();
+    } else {
+      ctx.fillStyle = '#222'; ctx.strokeStyle = '#ff8a00'; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.arc(pX, pY, scale * 0.38, 0, 7); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = '#ff8a00'; ctx.fillRect(pX - 2, pY - scale * 0.55, 4, scale * 0.2);
+    }
+    ctx.globalAlpha = 1;
+    // target
+    const tX = px(v.target.x), tY = px(v.target.y), pulse = 0.5 + 0.5 * Math.sin(now / 180);
+    ctx.strokeStyle = '#7ed957'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc(tX, tY, scale * (0.45 + 0.1 * pulse), 0, 7); ctx.stroke();
+    ctx.beginPath(); ctx.arc(tX, tY, scale * 0.15, 0, 7); ctx.fillStyle = '#7ed957'; ctx.fill();
+    // the waypoint it's heading for, when a wall is in the way
+    if (v.aim && v.aim !== v.target) {
+      ctx.setLineDash([4, 6]); ctx.strokeStyle = 'rgba(126,217,87,0.6)'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(px(v.ball.x), px(v.ball.y)); ctx.lineTo(px(v.aim.x), px(v.aim.y)); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = 'rgba(126,217,87,0.6)'; ctx.beginPath(); ctx.arc(px(v.aim.x), px(v.aim.y), 3, 0, 7); ctx.fill();
+    }
+    // trail
+    ctx.lineWidth = 2;
+    for (let i = 1; i < run.trail.length; i++) {
+      const a = run.trail[i - 1], b = run.trail[i];
+      ctx.strokeStyle = b.used ? 'rgba(255,190,60,0.7)' : 'rgba(232,69,60,0.45)';
+      ctx.beginPath(); ctx.moveTo(px(a.x), px(a.y)); ctx.lineTo(px(b.x), px(b.y)); ctx.stroke();
+    }
+    // explosion / burst
+    if (run.flash && run.flash.t < 1) {
+      const f = run.flash, r = (f.kind === 'bomb' ? 2.8 : 0.8) / TILE * scale * f.t;
+      ctx.strokeStyle = f.kind === 'bomb' ? `rgba(255,138,0,${1 - f.t})` : `rgba(255,210,63,${1 - f.t})`;
+      ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(px(f.x), px(f.y), r, 0, 7); ctx.stroke();
+      f.t += 0.04;
+    }
+    // ball (+ the keys it's pressing)
+    const bX = px(v.ball.x), bY = px(v.ball.y), R = 0.19 / TILE * scale;
+    ctx.fillStyle = '#e8453c'; ctx.beginPath(); ctx.arc(bX, bY, R, 0, 7); ctx.fill();
+    ctx.strokeStyle = '#000'; ctx.lineWidth = 1.5; ctx.stroke();
+    ctx.fillStyle = '#fff';
+    const k = v.keys, kx = (k.right ? 1 : 0) - (k.left ? 1 : 0), ky = (k.down ? 1 : 0) - (k.up ? 1 : 0);
+    if (kx || ky) { const n = Math.hypot(kx, ky); ctx.beginPath(); ctx.arc(bX + kx / n * R * 0.55, bY + ky / n * R * 0.55, R * 0.25, 0, 7); ctx.fill(); }
+    // HUD
+    const speed = Math.hypot(v.ball.vx, v.ball.vy);
+    $('hud').innerHTML = `${NAMES[run.driver]} &nbsp; ${(run.ticks / 60).toFixed(2)}s &nbsp; ${speed.toFixed(1)} m/s` +
+      (run.ready > 0 ? '<br>ready...' : '') + (run.done ? `<br>${run.reached ? 'Reached in ' + (run.ticks / 60).toFixed(2) + 's' : 'Timed out'}` : '');
+  }
+
+  // ---- loop: the engine at 60 ticks/s (x speed) ----
+  let last = performance.now(), acc = 0;
+  function frame(now) {
+    if (env && run) {
+      acc += Math.min(250, now - last) * +$('speed').value;
+      while (acc >= 1000 / 60) { acc -= 1000 / 60; tick(); }
+      if (run.done && $('auto').checked && now - run.finishedAt > 1200) newRun();
+      if (run) draw(now);
+    }
+    last = now;
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  $('next').onclick = () => newRun();
+  $('replay').onclick = () => newRun(true);
+  for (const id of ['driver', 'pickup', 'arena']) $(id).onchange = () => newRun(id === 'driver');
+  addEventListener('keydown', (e) => {
+    const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'w', 'a', 's', 'd'].includes(k)) { keys[k] = true; if (run && run.driver === 'human') e.preventDefault(); }
+  });
+  addEventListener('keyup', (e) => { keys[e.key.length === 1 ? e.key.toLowerCase() : e.key] = false; });
+})();
+</script>
+</body>
+</html>
