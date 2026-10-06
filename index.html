@@ -42,6 +42,15 @@
 
                 <label for="map">Map</label>
                 <select class="form-control" id="map"></select>
+                <div id="fm-box" style="display:none">
+                    <label for="fm-id">Fortunate Maps ID or link (<a href="https://fortunatemaps.herokuapp.com/" target="_blank" rel="noopener">browse maps</a>)</label>
+                    <div class="fm-row">
+                        <input class="form-control" id="fm-id" placeholder="e.g. 69860 or https://fortunatemaps.herokuapp.com/map/69860">
+                        <button class="btn btn-default" id="fm-add" type="button">Use map</button>
+                    </div>
+                    <img id="fm-preview" alt="" style="display:none">
+                    <div id="fm-status"></div>
+                </div>
                 <button class="btn btn-default btn-sm" id="forget" type="button" style="display:none">Remove this map from the list</button>
 
                 <label for="mode">Mode</label>
@@ -84,16 +93,6 @@
                 <button class="btn btn-primary play" type="submit">Play</button>
             </form>
 
-            <form class="card" id="fm-form">
-                <b>Add a map from <a href="https://fortunatemaps.herokuapp.com/" target="_blank" rel="noopener">Fortunate Maps</a></b>
-                <label for="fm-id">Map ID or link</label>
-                <div class="fm-row">
-                    <input class="form-control" id="fm-id" placeholder="e.g. 69860 or https://fortunatemaps.herokuapp.com/map/69860">
-                    <button class="btn btn-default" type="submit">Add</button>
-                </div>
-                <img id="fm-preview" alt="" style="display:none">
-                <div id="fm-status"></div>
-            </form>
 
             <form class="card" id="upload-form">
                 <b>Add your own map files</b>
