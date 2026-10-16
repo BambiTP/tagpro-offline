@@ -651,7 +651,7 @@ class GameRoom {
     p.effects = {}; p.ms = PH.MAX_SPEED * this.settings.topspeed; p.ac = PH.ACCEL * this.settings.accel;
     this.queue(p, 'dead', 'draw', 'ms', 'ac');
     if (!opts.silent) {
-      p['s-pops']++; this.queue(p, 's-pops');
+      if (!opts.huddle) { p['s-pops']++; this.queue(p, 's-pops'); } // eggball resets aren't pops
       if (killer) { killer['s-tags']++; this.queue(killer, 's-tags'); }
       // eggball: a splat on an endzone is temporary (replays: temp exactly when it lands on one)
       const tile = this.egg && this.tileAt(at.x, at.y), temp = !!tile && (tile.t === T.RED_ENDZONE || tile.t === T.BLUE_ENDZONE);
