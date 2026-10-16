@@ -4,18 +4,18 @@
 // every column except player and captures). The stats come from the game server.
 tagpro.ready(function() {
     var columns = [
-        ["s-points", "Points", "Points scored: 2 for throwing or catching a Raptor Boat, 1 for any other score"],
-        ["s-pops", "Popped", "Times popped"],
-        ["s-tackles", "Tackles", "Enemy egg holders you popped"],
-        ["s-tackled", "Tackled", "Times an enemy popped you while you held the egg"],
-        ["s-passes", "Passes", "Throws caught by a teammate"],
-        ["s-incompletions", "Incomplete", "Throws an enemy picked up too late to be an interception"],
-        ["s-selfThrows", "Self Throws", "Throws you caught yourself"],
-        ["s-dunks", "Dunks", "Self Raptor Boats: your own wall bounce caught in your end zone (no extra points)"],
-        ["s-intThrown", "INT Thrown", "Interceptions thrown: throws an enemy caught"],
-        ["s-intCaught", "INT Caught", "Interceptions caught: enemy throws you caught"],
-        ["s-raptorThrows", "Raptor Throws", "Raptor Boats thrown"],
-        ["s-raptorCatches", "Raptor Catches", "Raptor Boats caught"],
+        ["s-points", "Pts", "Points scored: 2 for throwing or catching a Raptor Boat, 1 for any other score"],
+        ["s-pops", "Pops", "Times popped"],
+        ["s-tackles", "Tkl", "Tackles: enemy egg holders you popped"],
+        ["s-tackled", "Tkd", "Tackled: times an enemy popped you while you held the egg"],
+        ["s-passes", "Pass", "Passes: throws caught by a teammate"],
+        ["s-incompletions", "Inc", "Incomplete: throws an enemy picked up too late to be an interception"],
+        ["s-selfThrows", "Self", "Self throws: throws you caught yourself"],
+        ["s-dunks", "Dunk", "Dunks: self Raptor Boats, your own wall bounce caught in your end zone (no extra points)"],
+        ["s-intThrown", "INT", "Interceptions thrown: throws an enemy caught"],
+        ["s-intCaught", "Pick", "Picks (interceptions caught): enemy throws you caught"],
+        ["s-raptorThrows", "RBT", "Raptor Boat throws"],
+        ["s-raptorCatches", "RBC", "Raptor Boat catches"],
     ];
 
     tagpro.events.register({
