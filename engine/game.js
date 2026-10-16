@@ -22,6 +22,13 @@ const T = {
   PORTAL: 13, RED_BOOST: 14, BLUE_BOOST: 15, YELLOW_FLAG: 16, RED_ENDZONE: 17, BLUE_ENDZONE: 18,
   RED_POTATO: 19, BLUE_POTATO: 20, GRAVITY_WELL: 22, YELLOW_TILE: 23, RED_PORTAL: 24, BLUE_PORTAL: 25,
 };
+// eggball scoreboard stats (shown by the eggball page script); s-points: 2 for each Raptor Boat throw
+// or catch, 1 for any other score. Every throw ends as one of: pass (a teammate catches it),
+// interception (an enemy catches it in time to pop the thrower: s-intThrown for the thrower,
+// s-intCaught for the catcher), self throw (the thrower catches it back) or incompletion (anything
+// else, counted for the thrower). s-dunks: a self throw that would be a Raptor Boat (no extra points).
+// s-tackles / s-tackled: an enemy pops the egg holder
+const EGG_STATS = { 's-tackles': 0, 's-tackled': 0, 's-passes': 0, 's-incompletions': 0, 's-selfThrows': 0, 's-dunks': 0, 's-intThrown': 0, 's-intCaught': 0, 's-raptorThrows': 0, 's-raptorCatches': 0, 's-points': 0 };
 const PUPS = { 1: 'jukeJuice', 2: 'rollingBomb', 3: 'tagpro', 4: 'topSpeed' };
 const PICKUP_KIND = { 5: 'boost', 14: 'boost', 15: 'boost', 6: 'powerup', 10: 'bomb' }; // floor(tile) -> touch radius
 
@@ -53,7 +60,7 @@ const EGG_CLIENT_INFO = {
   eventGraphics: [{ id: 'egg', src: '/events/easter-2016/images/egg.png' }]
     .concat(Array.from({ length: 17 }, (_, i) => ({ id: 'raptor' + (i + 1), src: `/events/easter-2017/images/raptor${i + 1}.png` })))
     .concat([{ id: 'field', src: '/events/easter-2017/images/field.png' }]),
-  eventScripts: ['/events/easter-2017/scripts/easter-2017.js'],
+  eventScripts: ['/events/easter-2017/scripts/easter-2017.js', '/events/easter-2017/scripts/eggball-stats.js'],
   eventSplats: '/images/events/easter/splats.png',
 };
 const EGG = {
@@ -318,6 +325,7 @@ class GameRoom {
       playTime: '00:00', afk: false, pending: false, skill: null, tier: null, subTier: null,
       lx: 0, ly: 0, a: 0, ra: 0,
     };
+    if (this.egg) Object.assign(p, EGG_STATS);
     Object.defineProperty(p, 'draw', { value: false, writable: true, enumerable: false });
     if (session.auth) Object.assign(p, { auth: session.auth, flair: session.flair || null, degree: session.degree || 0 });
     Object.defineProperties(p, {
@@ -1340,6 +1348,7 @@ class GameRoom {
 
   destroyEgg() {
     const e = this.egg;
+    e.inFlight = false;
     if (!e.body) return;
     this.world.DestroyBody(e.body);
     e.body = null;
@@ -1364,7 +1373,7 @@ class GameRoom {
     this.queue(p, 'flag', 'potatoFlag', 'selfDestructSoon', 'ms');
     const b = this.createEgg(pos.x + dx * EGG.SPAWN_OFFSET, pos.y + dy * EGG.SPAWN_OFFSET, p.team);
     b.ApplyImpulse(new V(dx * EGG.THROW_IMPULSE, dy * EGG.THROW_IMPULSE), b.GetWorldCenter());
-    e.thrower = p.id; e.throwAt = now;
+    e.thrower = p.id; e.throwAt = now; e.inFlight = true;
     this.broadcast('object', this.eggPacket());
   }
 
@@ -1373,13 +1382,14 @@ class GameRoom {
     if (this.world.IsLocked()) { const a = { x: at.x, y: at.y }; this.afterStep.push(() => this.egg.state === 'play' && this.egg.holder == null && !this.egg.body && this.eggDrop(a, team)); this.eggState('play', null); return; }
     this.eggState('play', null);
     this.createEgg(at.x, at.y, team);
-    this.egg.thrower = null; this.egg.throwAt = -Infinity;
+    this.egg.thrower = null; this.egg.throwAt = -Infinity; this.egg.inFlight = false;
     this.broadcast('object', this.eggPacket());
   }
 
   eggHolderPopped(p, killer, at) {
     p.potatoFlag = null; this.queue(p, 'potatoFlag');
     if (this.egg.state !== 'play') return;
+    if (killer && killer.team !== p.team) { killer['s-tackles']++; p['s-tackled']++; this.queue(killer, 's-tackles'); this.queue(p, 's-tackled'); }
     if (killer && !killer.dead && killer.team !== p.team) this.eggGive(killer); // the tagger takes it
     else this.eggDrop(at, p.team);
   }
@@ -1417,7 +1427,16 @@ class GameRoom {
     const e = this.egg, thrower = e.thrower != null && this.players[e.thrower], since = now - e.throwAt;
     const at = e.body.GetPosition();
     if (thrower && p === thrower && since < EGG.SELF_SPLAT_MS) this.broadcast('splat', { x: Math.round(at.x * PH.SCALE), y: Math.round(at.y * PH.SCALE), t: p.team, temp: false });
-    if (thrower && !thrower.dead && p.team !== e.throwTeam && since < EGG.INTERCEPT_MS) this.pop(thrower, p); // interception
+    const intercepted = thrower && !thrower.dead && p.team !== e.throwTeam && since < EGG.INTERCEPT_MS;
+    if (e.inFlight && thrower) {
+      const dunk = p === thrower && e.bounced && since < EGG.BOAT_MS && this.inOwnEndzone(p);
+      const stats = intercepted ? [[thrower, 's-intThrown'], [p, 's-intCaught']]
+        : p === thrower ? [[p, 's-selfThrows'], ...(dunk ? [[p, 's-dunks']] : [])]
+        : [[thrower, p.team === e.throwTeam ? 's-passes' : 's-incompletions']];
+      for (const [q, k] of stats) { q[k]++; this.queue(q, k); }
+    }
+    e.inFlight = false;
+    if (intercepted) this.pop(thrower, p); // interception
     const boat = thrower && p !== thrower && p.team === e.throwTeam && e.bounced && since < EGG.BOAT_MS && this.inOwnEndzone(p);
     this.eggState('play', p.id);
     this.destroyEgg();
@@ -1430,6 +1449,8 @@ class GameRoom {
   // then the usual huddle packets and the catcher's score; both get a capture)
   eggScore(p, boatThrower) {
     const add = (q) => { if (q.team === 1) this.score.r++; else this.score.b++; q['s-captures']++; this.queue(q, 's-captures'); };
+    const stat = (q, k, n = 1) => { q[k] += n; this.queue(q, k); };
+    if (boatThrower) { stat(boatThrower, 's-raptorThrows'); stat(boatThrower, 's-points', 2); stat(p, 's-raptorCatches'); stat(p, 's-points', 2); } else stat(p, 's-points');
     if (boatThrower) {
       this.broadcast('boat', Math.floor(Math.random() * EGG.RAPTORS));
       add(boatThrower);
@@ -1563,11 +1584,8 @@ class GameRoom {
   // compared with the other eligible players in this game (z-score), weighted, and rescaled to
   // 50 + 20 per standard deviation. Eligible: played 15% of the game so far and 30 seconds.
   updateScores(now) {
-    if (this.egg) { // eggball keeps the old points score
-      for (const p of Object.values(this.players)) {
-        const sc = p['s-captures'] * 100 + p['s-grabs'] * 5 + p['s-tags'] * 5 + p['s-returns'] * 5 + p['s-hold'] + p['s-prevent'] + p['s-powerups'] * 5 - p['s-pops'];
-        if (sc !== p.score) { p.score = sc; this.queue(p, 'score'); }
-      }
+    if (this.egg) { // eggball: the score is the points stat (the scoreboard sorts by score)
+      for (const p of Object.values(this.players)) if (p['s-points'] !== p.score) { p.score = p['s-points']; this.queue(p, 'score'); }
       return;
     }
     const start = this.startedPlayAt;
