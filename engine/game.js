@@ -593,7 +593,8 @@ class GameRoom {
     const t = this.egg ? this.eggSpawnTile(p.team) : this.pickSpawn(p.team);
     const gen = p.spawnGen = (p.spawnGen || 0) + 1; // a newer spawn (eggball huddle) replaces this one
     const px = t.x * PH.TILE, py = t.y * PH.TILE;
-    this.broadcast('spawn', { x: px * PH.SCALE, y: py * PH.SCALE, t: p.team, w: wait });
+    // a player holding the tagpro powerup isn't told about spawns (spawns already shown stay)
+    this.broadcast('spawn', { x: px * PH.SCALE, y: py * PH.SCALE, t: p.team, w: wait }, (c) => { const v = c.playerId && this.players[c.playerId]; return !v || !v.tagpro; });
     const done = () => {
       if (!this.players[p.id] || this.ended || p.spawnGen !== gen) return;
       p.dead = false;
@@ -1554,8 +1555,49 @@ class GameRoom {
         const h = this.flagHome[p.team], pos = p.body.GetPosition();
         if (Math.hypot(pos.x - h.x * PH.TILE, pos.y - h.y * PH.TILE) < 8 * PH.TILE) { p['s-prevent']++; this.queue(p, 's-prevent'); }
       }
-      const sc = p['s-captures'] * 100 + p['s-grabs'] * 5 + p['s-tags'] * 5 + p['s-returns'] * 5 + p['s-hold'] + p['s-prevent'] + p['s-powerups'] * 5 - p['s-pops'];
-      if (sc !== p.score) { p.score = sc; this.queue(p, 'score'); }
+    }
+    this.updateScores(now);
+  }
+
+  // the real client's scoreboard score, "IPMv1.1" (copied from its replay code): each stat is
+  // compared with the other eligible players in this game (z-score), weighted, and rescaled to
+  // 50 + 20 per standard deviation. Eligible: played 15% of the game so far and 30 seconds.
+  updateScores(now) {
+    if (this.egg) { // eggball keeps the old points score
+      for (const p of Object.values(this.players)) {
+        const sc = p['s-captures'] * 100 + p['s-grabs'] * 5 + p['s-tags'] * 5 + p['s-returns'] * 5 + p['s-hold'] + p['s-prevent'] + p['s-powerups'] * 5 - p['s-pops'];
+        if (sc !== p.score) { p.score = sc; this.queue(p, 'score'); }
+      }
+      return;
+    }
+    const start = this.startedPlayAt;
+    if (!start || now <= start) return;
+    const players = Object.values(this.players);
+    const mins = (p) => (now - Math.max(p.joinedAt, start)) / 60000;
+    const elig = players.filter((p) => mins(p) / ((now - start) / 60000) >= 0.15 && mins(p) >= 0.5);
+    const rate = (p, k) => (mins(p) > 0 ? p['s-' + k] / mins(p) : 0);
+    const stat = {
+      captures: (p) => rate(p, 'captures'), // the real server adds good handoffs on neutral flag; not tracked here
+      hold: (p) => rate(p, 'hold'), prevent: (p) => rate(p, 'prevent'), returns: (p) => rate(p, 'returns'),
+      nonReturnTags: (p) => (mins(p) > 0 ? (p['s-tags'] - p['s-returns']) / mins(p) : 0),
+      scorePercent: (p) => (p['s-grabs'] > 0 ? p['s-captures'] / p['s-grabs'] : 0),
+      kd: (p) => (p['s-pops'] > 0 ? p['s-tags'] / p['s-pops'] : 0),
+    };
+    const meanSd = (xs) => { const m = xs.reduce((a, b) => a + b, 0) / xs.length; return { m, sd: Math.sqrt(xs.reduce((a, x) => a + (x - m) ** 2, 0) / xs.length) }; };
+    const vals = {}, dist = {};
+    for (const k in stat) { vals[k] = elig.map(stat[k]); dist[k] = meanSd(vals[k]); }
+    const side = (w, i) => Object.entries(w).reduce((a, [k, wt]) => { const { m, sd } = dist[k]; const z = sd > 0 ? ((vals[k][i] - m) / sd) * wt : 0; return a + (isFinite(z) ? z : 0); }, 0);
+    const o = elig.map((p, i) => side({ captures: 20, hold: 38, scorePercent: 42 }, i));
+    const d = elig.map((p, i) => side({ kd: 18, returns: 34, prevent: 40, nonReturnTags: 8 }, i));
+    const t = o.map((x, i) => (x > d[i] ? x * 2 / 3 + d[i] / 3 : d[i] > x ? x / 3 + d[i] * 2 / 3 : (x + d[i]) / 2));
+    const scale = (xs) => { const { m, sd } = meanSd(xs); return xs.map((x) => { const v = ((x - m) / sd) * 20 + 50; return isFinite(v) ? Math.round(v) : 0; }); };
+    const so = scale(o), sd = scale(d), st = scale(t), out = new Map();
+    elig.forEach((p, i) => out.set(p, [st[i], so[i], sd[i]]));
+    for (const p of players) {
+      const [score, oscore, dscore] = out.get(p) || [0, 0, 0];
+      if (score !== p.score) { p.score = score; this.queue(p, 'score'); }
+      if (oscore !== p.oscore) { p.oscore = oscore; this.queue(p, 'oscore'); }
+      if (dscore !== p.dscore) { p.dscore = dscore; this.queue(p, 'dscore'); }
     }
   }
 
